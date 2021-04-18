@@ -451,11 +451,14 @@ class SNPSearch extends React.Component {
         console.log('start_min:' + start_min + "; end_max:" + end_max)
         var promoter_api_url;
         if(this.state.cell === "hMSC"){
-            promoter_api_url = "http://localhost:5000/promoterhMSC/" + reg.replaceAll(':', '%3A');
+            promoter_api_url = process.env.REACT_APP_EXPRESS_URL + reg.replaceAll(':', '%3A');
+            //promoter_api_url = "http://localhost:5000/promoterhMSC/" + reg.replaceAll(':', '%3A');
         }else if(this.state.cell === "Osteoblast"){
-            promoter_api_url = "http://localhost:5000/promoterOB/" + reg.replaceAll(':', '%3A');
+            //promoter_api_url = "http://localhost:5000/promoterOB/" + reg.replaceAll(':', '%3A');
+            promoter_api_url = process.env.REACT_APP_EXPRESS_URL + reg.replaceAll(':', '%3A');
         }else{
-            promoter_api_url = "http://localhost:5000/promoterOC/" + reg.replaceAll(':', '%3A');
+            //promoter_api_url = "http://localhost:5000/promoterOC/" + reg.replaceAll(':', '%3A');
+            promoter_api_url = process.env.REACT_APP_EXPRESS_URL + reg.replaceAll(':', '%3A');
         }
         console.log(promoter_api_url);
         try{
@@ -498,7 +501,8 @@ class SNPSearch extends React.Component {
                 promoters: res_promoter.data,
                 promoterResults: true
             })
-            const response = await fetch('http://localhost:5000/writeFile',{
+            //const response = await fetch('http://localhost:5000/writeFile',{
+            const response = await fetch(process.env.REACT_APP_EXPRESS_URL + '/writeFile',{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -575,7 +579,7 @@ class SNPSearch extends React.Component {
         })
             
             
-        const response = await fetch('http://localhost:5000/writeFile',{
+        const response = await fetch(process.env.REACT_APP_EXPRESS_URL + '/writeFile',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -704,7 +708,8 @@ class SNPSearch extends React.Component {
         try{
           //alert(trait_name)
           //console.log(this.state.trait_name);
-          var snp_url = "http://localhost:5000/snp/" + this.state.rsid;
+          //var snp_url = "http://localhost:5000/snp/" + this.state.rsid;
+          var snp_url = process.env.REACT_APP_EXPRESS_URL + "/snp/" + this.state.rsid;
           console.log(snp_url);
           const res = await axios.get(snp_url);
           console.log(res.data);
