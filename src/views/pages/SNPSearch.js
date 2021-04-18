@@ -451,14 +451,14 @@ class SNPSearch extends React.Component {
         console.log('start_min:' + start_min + "; end_max:" + end_max)
         var promoter_api_url;
         if(this.state.cell === "hMSC"){
-            promoter_api_url = process.env.REACT_APP_EXPRESS_URL + reg.replaceAll(':', '%3A');
+            promoter_api_url = process.env.REACT_APP_EXPRESS_URL + '/' + reg.replaceAll(':', '%3A');
             //promoter_api_url = "http://localhost:5000/promoterhMSC/" + reg.replaceAll(':', '%3A');
         }else if(this.state.cell === "Osteoblast"){
             //promoter_api_url = "http://localhost:5000/promoterOB/" + reg.replaceAll(':', '%3A');
-            promoter_api_url = process.env.REACT_APP_EXPRESS_URL + reg.replaceAll(':', '%3A');
+            promoter_api_url = process.env.REACT_APP_EXPRESS_URL + '/' + reg.replaceAll(':', '%3A');
         }else{
             //promoter_api_url = "http://localhost:5000/promoterOC/" + reg.replaceAll(':', '%3A');
-            promoter_api_url = process.env.REACT_APP_EXPRESS_URL + reg.replaceAll(':', '%3A');
+            promoter_api_url = process.env.REACT_APP_EXPRESS_URL + '/' + reg.replaceAll(':', '%3A');
         }
         console.log(promoter_api_url);
         try{
