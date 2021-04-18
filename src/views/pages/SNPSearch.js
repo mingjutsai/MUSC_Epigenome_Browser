@@ -7,8 +7,7 @@ import { MDBContainer } from 'mdbreact';
 import igv from 'igv';
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import { Loader } from '../../vibe/';
-import PageLoaderContext from '../../vibe/components/PageLoader/PageLoaderContext';
-//import igv from 'tmp_es6_igv';
+//import {APP_URL} from 'react-native-dotenv';
 
 import {
     Button,
@@ -50,6 +49,8 @@ class SNPSearch extends React.Component {
             locus_range: '',
             locus_hic_url: '',
             locus_snp_url: '',
+            encode_ccre_url: '',
+            gencode_url: '',
             atac_url: '',
             dnase_url: '',
             chromHMM_url: '',
@@ -184,7 +185,7 @@ class SNPSearch extends React.Component {
         if (isSelect) {
             console.log("rowIndex:" + rowIndex)
             this.setState({selectRowNo: rowIndex})
-            console.log(this.selectRowNo)
+            //console.log(this.selectRowNo)
             //this.state.selectRowNo = 0 + rowIndex
             
             const res_generateTable = this.generateTableData(rowIndex);
@@ -215,8 +216,6 @@ class SNPSearch extends React.Component {
                     thickness: 2,
                     tracks: [
                         {
-                            //url: "https://s3.amazonaws.com/igv.org.demo/GSM1872886_GM12878_CTCF_PET.bedpe.txt",
-                            //url: "http://localhost:3000/igv/hMSC_rs2018415.bedpe.txt",
                             url: this.state.locus_hic_url,
                             type: "interaction",
                             format: "bedpe",
@@ -310,7 +309,8 @@ class SNPSearch extends React.Component {
                         {
                             type: "annotation",
                             format: "bb",
-                            url: "http://localhost:3000/igv/bigwig/encodeCcreCombined.bb",
+                            //url: "http://localhost:3000/igv/bigwig/encodeCcreCombined.bb",
+                            url: this.state.encode_ccre_url,
                             height: 50,
                             name: "ENCODE-cCRE",
                             displayMode: "EXPANDED",
@@ -327,8 +327,9 @@ class SNPSearch extends React.Component {
                         {
                             type: "annotation",
                             format: "gtf",
-                            url: "http://localhost:3000/igv/gencode.v35.annotation.sort.gtf.gz",
-                            indexURL: "http://localhost:3000/igv/gencode.v35.annotation.sort.gtf.gz.tbi",
+                            url: this.state.gencode_url,
+                            indexURL: this.state.gencode_url + '.tbi',
+                            //indexURL: "http://localhost:3000/igv/gencode.v35.annotation.sort.gtf.gz.tbi",
                             //displayMode: "SQUISHED",
                             displayMode: "EXPANDED",
                             name: "Gencode v35 (gtf)",
@@ -420,8 +421,9 @@ class SNPSearch extends React.Component {
                         {
                             type: "annotation",
                             format: "gtf",
-                            url: "http://localhost:3000/igv/gencode.v35.annotation.sort.gtf.gz",
-                            indexURL: "http://localhost:3000/igv/gencode.v35.annotation.sort.gtf.gz.tbi",
+                            url: this.state.gencode_url,
+                            indexURL: this.state.gencode_url + '.tbi',
+                            //indexURL: "http://localhost:3000/igv/gencode.v35.annotation.sort.gtf.gz.tbi",
                             //displayMode: "SQUISHED",
                             displayMode: "EXPANDED",
                             name: "Gencode v35 (gtf)",
@@ -490,7 +492,9 @@ class SNPSearch extends React.Component {
             //console.log('start_min:' + start_min + "; end_max:" + end_max)
             //console.log(igv_bedpe_content)
             this.setState({
-                locus_hic_url: "http://localhost:3000/igv/" + this.state.rsid + "_" + this.state.cell + ".bedpe.txt",
+                
+                //locus_hic_url: "http://localhost:3000/igv/" + this.state.rsid + "_" + this.state.cell + ".bedpe.txt",
+                locus_hic_url: process.env.REACT_APP_BASE_URL + "/igv/" + this.state.rsid + "_" + this.state.cell + ".bedpe.txt",
                 promoters: res_promoter.data,
                 promoterResults: true
             })
@@ -531,7 +535,9 @@ class SNPSearch extends React.Component {
     generateTableData = async (index) => {
         var annotation = this.state.snps[index];
         var anno_json = [...this.state.snps];
-        console.log("origin anno_json:" + JSON.stringify(anno_json))
+        console.log('APP_URL:')
+        
+        //console.log("origin anno_json:" + JSON.stringify(anno_json))
         var arr = [];
         for(var i=0; i< this.state.snps.length; i++){
             if(i == index){
@@ -553,14 +559,17 @@ class SNPSearch extends React.Component {
         dataHorizontalgnomad_update.datasets[0].data = AF_gnomad;
         dataHorizontalgnomad_update.datasets[0].label = "gnomAD";
         var rsidURL = "https://www.ncbi.nlm.nih.gov/snp/" + this.state.rsid;
-        var rsidURL_igv = "http://localhost:3000/igv/" + this.state.rsid + ".bed";
+        //var rsidURL_igv = "http://localhost:3000/igv/" + this.state.rsid + ".bed";
+        //var rsidURL_igv = process.env.REACT_APP_BASE_URL + "/igv/" + this.state.rsid + ".bed";
         this.setState({
             chr: annotation["#Chr"],
             pos: annotation.Start,
             ref: annotation.Ref,
             alt: annotation.Alt,
-            rsid_url: rsidURL,
-            locus_snp_url: rsidURL_igv,
+            rsid_url: "https://www.ncbi.nlm.nih.gov/snp/" + this.state.rsid,
+            encode_ccre_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/encodeCcreCombined.bb',
+            gencode_url: process.env.REACT_APP_BASE_URL + '/igv/gencode.v35.annotation.sort.gtf.gz',
+            locus_snp_url: process.env.REACT_APP_BASE_URL + "/igv/" + this.state.rsid + ".bed",
             dataHorizontal1000G: dataHorizontal1000G_update,
             dataHorizontalgnomad: dataHorizontalgnomad_update,
         })
@@ -598,13 +607,13 @@ class SNPSearch extends React.Component {
             ]
             this.setState({
                 SNPColumns: columns_update,
-                atac_url: 'http://localhost:3000/igv/bigwig/hMSC/ATAC_seq-hMSC_pvalue.bigwig',
-                dnase_url: 'http://localhost:3000/igv/bigwig/hMSC/DNase_seq_hMSC.bigWig',
-                chromHMM_url: 'http://localhost:3000/igv/bigwig/hMSC/E026_25_imputed12marks_hg38lift_dense.bed',
-                H3k27ac_url: 'http://localhost:3000/igv/bigwig/hMSC/ENCFF223NOV_hMSC_H3K27Ac_pvalue.bigWig',
-                H3k4me3_url: 'http://localhost:3000/igv/bigwig/hMSC/ENCFF611FKW_hMSC_H3K4me3_pvalue.bigWig',
-                H3k4me1_url: 'http://localhost:3000/igv/bigwig/hMSC/ENCFF648BRC_hMSC_H3K4me1_pvalue.bigWig',
-                H3k9ac_url: 'http://localhost:3000/igv/bigwig/hMSC/ENCFF757SDY_hMSC_H3K9ac_pvalue.bigWig',
+                atac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/ATAC_seq-hMSC_pvalue.bigwig',
+                dnase_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/DNase_seq_hMSC.bigWig',
+                chromHMM_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/E026_25_imputed12marks_hg38lift_dense.bed',
+                H3k27ac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/ENCFF223NOV_hMSC_H3K27Ac_pvalue.bigWig',
+                H3k4me3_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/ENCFF611FKW_hMSC_H3K4me3_pvalue.bigWig',
+                H3k4me1_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/ENCFF648BRC_hMSC_H3K4me1_pvalue.bigWig',
+                H3k9ac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/ENCFF757SDY_hMSC_H3K9ac_pvalue.bigWig',
             })
             
             //console.log("sigHiC:" + annotation.SigHiC_hMSC)
@@ -632,12 +641,12 @@ class SNPSearch extends React.Component {
             ]
             this.setState({
                 SNPColumns: columns_update,
-                atac_url: 'http://localhost:3000/igv/bigwig/osteoblast/ATAC_seq-osteoblast_pvalue.bigWig',
-                dnase_url: 'http://localhost:3000/igv/bigwig/osteoblast/DNase_seq_osteoblast.bigWig',
-                chromHMM_url: 'http://localhost:3000/igv/bigwig/osteoblast/E129_25_imputed12marks_hg38lift_dense.bed',
-                H3k27ac_url: 'http://localhost:3000/igv/bigwig/osteoblast/ENCFF048BRN_H3K27ac_OB_p-value.bigWig',
-                H3k4me3_url: 'http://localhost:3000/igv/bigwig/osteoblast/ENCFF327MED_ H3K4me3_OB_pvalue.bigWig',
-                H3k4me1_url: 'http://localhost:3000/igv/bigwig/osteoblast/ENCFF103BYE_H3K4me1_OB_pvalue.bigWig',
+                atac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ATAC_seq-osteoblast_pvalue.bigWig',
+                dnase_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/DNase_seq_osteoblast.bigWig',
+                chromHMM_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/E129_25_imputed12marks_hg38lift_dense.bed',
+                H3k27ac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF048BRN_H3K27ac_OB_p-value.bigWig',
+                H3k4me3_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF327MED_ H3K4me3_OB_pvalue.bigWig',
+                H3k4me1_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF103BYE_H3K4me1_OB_pvalue.bigWig',
                 H3k9ac_url: '',
             })
             if(annotation.SigHiC_OB13){
