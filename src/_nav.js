@@ -137,7 +137,7 @@ export default {
   bottom: [
     {
       name: 'GitHub',
-      url: 'https://github.com/NiceDash/Vibe',
+      url: 'https://github.com/mingjutsai/MUSC_Epigenome_Browser',
       icon: 'GitHub',
       external: true,
       target: '_blank',
