@@ -21,9 +21,7 @@ import {
     Col,
     Label,
     TabContent, TabPane, Nav, NavItem, NavLink
-  } from "reactstrap";
-import { Bluetooth } from "react-feather";
-
+} from "reactstrap";
 
 var igvStyle = {
     paddingTop: '10px',
@@ -58,6 +56,8 @@ class GeneSearch extends React.Component {
             H3k4me3_url: '',
             H3k4me1_url: '',
             H3k9ac_url: '',
+            gencode_url: '',
+            encode_ccre_url: '',
             hic: '',
             selectRowNo: null,
             showTable: false,
@@ -133,8 +133,6 @@ class GeneSearch extends React.Component {
                 thickness: 5,
                 tracks: [
                     {
-                        //url: "https://s3.amazonaws.com/igv.org.demo/GSM1872886_GM12878_CTCF_PET.bedpe.txt",
-                        //url: "http://localhost:3000/igv/hMSC_rs2018415.bedpe.txt",
                         url: this.state.locus_hic_url,
                         type: "interaction",
                         format: "bedpe",
@@ -155,8 +153,6 @@ class GeneSearch extends React.Component {
                     {
                         type: "wig",
                         format: "bigwig",
-                        //color: "black",
-                        //url: "http://localhost:3000/igv/bigwig/hMSC/ATAC_seq-hMSC_pvalue.bigwig",
                         url: this.state.atac_url,
                         height: 50,
                         name: "ATAC-seq",
@@ -164,8 +160,6 @@ class GeneSearch extends React.Component {
                     {
                         type: "wig",
                         format: "bigwig",
-                        //color: "black",
-                        //url: "http://localhost:3000/igv/bigwig/hMSC/DNase_seq_hMSC.bigWig",
                         url: this.state.dnase_url,
                         height: 50,
                         name: "Dnase-seq",
@@ -173,7 +167,6 @@ class GeneSearch extends React.Component {
                     {
                         type: "annotation",
                         format: "bed",
-                        //url: "http://localhost:3000/igv/bigwig/hMSC/E026_25_imputed12marks_hg38lift_dense.bed",
                         url: this.state.chromHMM_url,
                         height: 50,
                         name: "ChromHMM",
@@ -182,8 +175,6 @@ class GeneSearch extends React.Component {
                     {
                         type: "wig",
                         format: "bigwig",
-                        //color: "black",
-                        //url: "http://localhost:3000/igv/bigwig/hMSC/ENCFF223NOV_hMSC_H3K27Ac_pvalue.bigWig",
                         url: this.state.H3k27ac_url,
                         height: 50,
                         name: "H3k27ac",
@@ -192,8 +183,6 @@ class GeneSearch extends React.Component {
                     {
                         type: "wig",
                         format: "bigwig",
-                        //color: "black",
-                        //url: "http://localhost:3000/igv/bigwig/hMSC/ENCFF648BRC_hMSC_H3K4me1_pvalue.bigWig",
                         url: this.state.H3k4me1_url,
                         height: 50,
                         name: "H3k4me1",
@@ -202,8 +191,6 @@ class GeneSearch extends React.Component {
                     {
                         type: "wig",
                         format: "bigwig",
-                        //color: "black",
-                        //url: "http://localhost:3000/igv/bigwig/hMSC/ENCFF611FKW_hMSC_H3K4me3_pvalue.bigWig",
                         url: this.state.H3k4me3_url,
                         height: 50,
                         name: "H3k4me3",
@@ -212,25 +199,16 @@ class GeneSearch extends React.Component {
                     {
                         type: "annotation",
                         format: "bb",
-                        url: "http://localhost:3000/igv/bigwig/encodeCcreCombined.bb",
+                        url: process.env.REACT_APP_BASE_URL + "/igv/bigwig/encodeCcreCombined.bb",
                         height: 50,
                         name: "ENCODE-cCRE",
                         displayMode: "EXPANDED",
                     },
-                    // {   
-                    //     type: "wig",
-                    //     format: "bigwig",
-                    //     //url: "http://localhost:3000/igv/bigwig/hMSC/ENCFF757SDY_hMSC_H3K9ac_pvalue.bigWig",
-                    //     url: this.state.H3k9ac_url,
-                    //     height: 50,
-                    //     name: "H3k9ac",
-                    //     color: "rgb(252, 74, 3)",
-                    // },
                     {
                         type: "annotation",
                         format: "gtf",
-                        url: "http://localhost:3000/igv/gencode.v35.annotation.sort.gtf.gz",
-                        indexURL: "http://localhost:3000/igv/gencode.v35.annotation.sort.gtf.gz.tbi",
+                        url: process.env.REACT_APP_BASE_URL + "/igv/gencode.v35.annotation.sort.gtf.gz",
+                        indexURL: process.env.REACT_APP_BASE_URL + "/igv/gencode.v35.annotation.sort.gtf.gz.tbi",
                         //displayMode: "SQUISHED",
                         displayMode: "EXPANDED",
                         name: "Gencode v35 (gtf)",
@@ -248,7 +226,7 @@ class GeneSearch extends React.Component {
             var promoter_api_url;
             var columns_update;
             if (this.state.cell === "hMSC") {
-                promoter_api_url = "http://localhost:5000/promoterhMSC2gene/" + this.state.gene;
+                promoter_api_url = process.env.REACT_APP_EXPRESS_URL + "/promoterhMSC2gene/" + this.state.gene;
                 columns_update = [
                     { dataField: "RSID", text: "rsID"},
                     { dataField: "ExonicFunc_Ensembl", text: "Function"},
@@ -261,16 +239,16 @@ class GeneSearch extends React.Component {
                 ]
                 this.setState({
                     exonicColumns: columns_update,
-                    atac_url: 'http://localhost:3000/igv/bigwig/hMSC/ATAC_seq-hMSC_pvalue.bigwig',
-                    dnase_url: 'http://localhost:3000/igv/bigwig/hMSC/DNase_seq_hMSC.bigWig',
-                    chromHMM_url: 'http://localhost:3000/igv/bigwig/hMSC/E026_25_imputed12marks_hg38lift_dense.bed',
-                    H3k27ac_url: 'http://localhost:3000/igv/bigwig/hMSC/ENCFF223NOV_hMSC_H3K27Ac_pvalue.bigWig',
-                    H3k4me3_url: 'http://localhost:3000/igv/bigwig/hMSC/ENCFF611FKW_hMSC_H3K4me3_pvalue.bigWig',
-                    H3k4me1_url: 'http://localhost:3000/igv/bigwig/hMSC/ENCFF648BRC_hMSC_H3K4me1_pvalue.bigWig',
-                    H3k9ac_url: 'http://localhost:3000/igv/bigwig/hMSC/ENCFF757SDY_hMSC_H3K9ac_pvalue.bigWig',
+                    atac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/ATAC_seq-hMSC_pvalue.bigwig',
+                    dnase_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/DNase_seq_hMSC.bigWig',
+                    chromHMM_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/E026_25_imputed12marks_hg38lift_dense.bed',
+                    H3k27ac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/ENCFF223NOV_hMSC_H3K27Ac_pvalue.bigWig',
+                    H3k4me3_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/ENCFF611FKW_hMSC_H3K4me3_pvalue.bigWig',
+                    H3k4me1_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/ENCFF648BRC_hMSC_H3K4me1_pvalue.bigWig',
+                    H3k9ac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/ENCFF757SDY_hMSC_H3K9ac_pvalue.bigWig',
                 })
             }else if(this.state.cell === "Osteoblast"){
-                promoter_api_url = "http://localhost:5000/promoterOB2gene/" + this.state.gene;
+                promoter_api_url = process.env.REACT_APP_EXPRESS_URL + "/promoterOB2gene/" + this.state.gene;
                 columns_update = [
                     { dataField: "RSID", text: "rsID"},
                     { dataField: "ExonicFunc_Ensembl", text: "Function"},
@@ -283,15 +261,15 @@ class GeneSearch extends React.Component {
                 ]
                 this.setState({
                     exonicColumns: columns_update,
-                    atac_url: 'http://localhost:3000/igv/bigwig/osteoblast/ATAC_seq-osteoblast_pvalue.bigWig',
-                    dnase_url: 'http://localhost:3000/igv/bigwig/osteoblast/DNase_seq_osteoblast.bigWig',
-                    chromHMM_url: 'http://localhost:3000/igv/bigwig/osteoblast/E129_25_imputed12marks_hg38lift_dense.bed',
-                    H3k27ac_url: 'http://localhost:3000/igv/bigwig/osteoblast/ENCFF048BRN_H3K27ac_OB_p-value.bigWig',
-                    H3k4me3_url: 'http://localhost:3000/igv/bigwig/osteoblast/ENCFF327MED_ H3K4me3_OB_pvalue.bigWig',
-                    H3k4me1_url: 'http://localhost:3000/igv/bigwig/osteoblast/ENCFF103BYE_H3K4me1_OB_pvalue.bigWig',
+                    atac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ATAC_seq-osteoblast_pvalue.bigWig',
+                    dnase_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/DNase_seq_osteoblast.bigWig',
+                    chromHMM_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/E129_25_imputed12marks_hg38lift_dense.bed',
+                    H3k27ac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF048BRN_H3K27ac_OB_p-value.bigWig',
+                    H3k4me3_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF327MED_ H3K4me3_OB_pvalue.bigWig',
+                    H3k4me1_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF103BYE_H3K4me1_OB_pvalue.bigWig',
                 })
             }else{
-                promoter_api_url = "http://localhost:5000/promoterOC2gene/" + this.state.gene;
+                promoter_api_url = process.env.REACT_APP_EXPRESS_URL + "/promoterOC2gene/" + this.state.gene;
                 columns_update = [
                     { dataField: "RSID", text: "rsID"},
                     { dataField: "ExonicFunc_Ensembl", text: "Function"},
@@ -304,12 +282,12 @@ class GeneSearch extends React.Component {
                 ]
                 this.setState({
                     exonicColumns: columns_update,
-                    atac_url: 'http://localhost:3000/igv/bigwig/osteoblast/ATAC_seq-osteoblast_pvalue.bigWig',
-                    dnase_url: 'http://localhost:3000/igv/bigwig/osteoblast/DNase_seq_osteoblast.bigWig',
-                    chromHMM_url: 'http://localhost:3000/igv/bigwig/osteoblast/E129_25_imputed12marks_hg38lift_dense.bed',
-                    H3k27ac_url: 'http://localhost:3000/igv/bigwig/osteoblast/ENCFF048BRN_H3K27ac_OB_p-value.bigWig',
-                    H3k4me3_url: 'http://localhost:3000/igv/bigwig/osteoblast/ENCFF327MED_ H3K4me3_OB_pvalue.bigWig',
-                    H3k4me1_url: 'http://localhost:3000/igv/bigwig/osteoblast/ENCFF103BYE_H3K4me1_OB_pvalue.bigWig',
+                    atac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ATAC_seq-osteoblast_pvalue.bigWig',
+                    dnase_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/DNase_seq_osteoblast.bigWig',
+                    chromHMM_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/E129_25_imputed12marks_hg38lift_dense.bed',
+                    H3k27ac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF048BRN_H3K27ac_OB_p-value.bigWig',
+                    H3k4me3_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF327MED_ H3K4me3_OB_pvalue.bigWig',
+                    H3k4me1_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF103BYE_H3K4me1_OB_pvalue.bigWig',
                 })
             }
             console.log(promoter_api_url)
@@ -350,7 +328,7 @@ class GeneSearch extends React.Component {
                 promoter_update[i].Chr = promoter_update[i].Chr + ":" + promoter_update[i].Start + "-" + promoter_update[i].End
                 //console.log('promoter:' + promoter_update[i].Chr)
             }
-            const response = await fetch('http://localhost:5000/writeFile',{
+            const response = await fetch(process.env.REACT_APP_EXPRESS_URL + '/writeFile',{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -373,7 +351,7 @@ class GeneSearch extends React.Component {
             console.log("locus range:chr" + hicPromoterBinChr + ":" + start_pos + "-" + end_pos)
             this.setState({
                 locus_range: "chr" + hicPromoterBinChr + ":" + start_pos + "-" + end_pos,
-                locus_hic_url: "http://localhost:3000/igv/" + this.state.gene + "_" + this.state.cell + ".bedpe.txt",
+                locus_hic_url: process.env.REACT_APP_BASE_URL + "/igv/" + this.state.gene + "_" + this.state.cell + ".bedpe.txt",
                 isLoading: false,
                 showTable: true,
                 snpResults: true,
@@ -389,7 +367,7 @@ class GeneSearch extends React.Component {
         try{
           //alert(trait_name)
           //console.log(this.state.trait_name);
-          var snp_url = "http://localhost:5000/snp2gene/" + this.state.gene;
+          var snp_url = process.env.REACT_APP_EXPRESS_URL + "/snp2gene/" + this.state.gene;
           console.log(snp_url);
           const res = await axios.get(snp_url);
           console.log(res.data);

@@ -5,9 +5,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import { HorizontalBar } from 'react-chartjs-2';
 import { MDBContainer } from 'mdbreact';
 import igv from 'igv';
-import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import { Loader } from '../../vibe/';
-//import {APP_URL} from 'react-native-dotenv';
 
 import {
     Button,
@@ -49,8 +47,6 @@ class SNPSearch extends React.Component {
             locus_range: '',
             locus_hic_url: '',
             locus_snp_url: '',
-            encode_ccre_url: '',
-            gencode_url: '',
             atac_url: '',
             dnase_url: '',
             chromHMM_url: '',
@@ -252,8 +248,6 @@ class SNPSearch extends React.Component {
                         {
                             type: "wig",
                             format: "bigwig",
-                            //color: "black",
-                            //url: "http://localhost:3000/igv/bigwig/hMSC/ATAC_seq-hMSC_pvalue.bigwig",
                             url: this.state.atac_url,
                             height: 50,
                             name: "ATAC-seq",
@@ -261,8 +255,6 @@ class SNPSearch extends React.Component {
                         {
                             type: "wig",
                             format: "bigwig",
-                            //color: "black",
-                            //url: "http://localhost:3000/igv/bigwig/hMSC/DNase_seq_hMSC.bigWig",
                             url: this.state.dnase_url,
                             height: 50,
                             name: "Dnase-seq",
@@ -270,7 +262,6 @@ class SNPSearch extends React.Component {
                         {
                             type: "annotation",
                             format: "bed",
-                            //url: "http://localhost:3000/igv/bigwig/hMSC/E026_25_imputed12marks_hg38lift_dense.bed",
                             url: this.state.chromHMM_url,
                             height: 50,
                             name: "ChromHMM",
@@ -279,8 +270,6 @@ class SNPSearch extends React.Component {
                         {
                             type: "wig",
                             format: "bigwig",
-                            //color: "black",
-                            //url: "http://localhost:3000/igv/bigwig/hMSC/ENCFF223NOV_hMSC_H3K27Ac_pvalue.bigWig",
                             url: this.state.H3k27ac_url,
                             height: 50,
                             name: "H3k27ac",
@@ -289,8 +278,6 @@ class SNPSearch extends React.Component {
                         {
                             type: "wig",
                             format: "bigwig",
-                            //color: "black",
-                            //url: "http://localhost:3000/igv/bigwig/hMSC/ENCFF648BRC_hMSC_H3K4me1_pvalue.bigWig",
                             url: this.state.H3k4me1_url,
                             height: 50,
                             name: "H3k4me1",
@@ -299,8 +286,6 @@ class SNPSearch extends React.Component {
                         {
                             type: "wig",
                             format: "bigwig",
-                            //color: "black",
-                            //url: "http://localhost:3000/igv/bigwig/hMSC/ENCFF611FKW_hMSC_H3K4me3_pvalue.bigWig",
                             url: this.state.H3k4me3_url,
                             height: 50,
                             name: "H3k4me3",
@@ -310,7 +295,7 @@ class SNPSearch extends React.Component {
                             type: "annotation",
                             format: "bb",
                             //url: "http://localhost:3000/igv/bigwig/encodeCcreCombined.bb",
-                            url: this.state.encode_ccre_url,
+                            url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/encodeCcreCombined.bb',
                             height: 50,
                             name: "ENCODE-cCRE",
                             displayMode: "EXPANDED",
@@ -327,10 +312,8 @@ class SNPSearch extends React.Component {
                         {
                             type: "annotation",
                             format: "gtf",
-                            url: this.state.gencode_url,
-                            indexURL: this.state.gencode_url + '.tbi',
-                            //indexURL: "http://localhost:3000/igv/gencode.v35.annotation.sort.gtf.gz.tbi",
-                            //displayMode: "SQUISHED",
+                            url: process.env.REACT_APP_BASE_URL + '/igv/gencode.v35.annotation.sort.gtf.gz',
+                            indexURL: process.env.REACT_APP_BASE_URL + '/igv/gencode.v35.annotation.sort.gtf.gz.tbi',
                             displayMode: "EXPANDED",
                             name: "Gencode v35 (gtf)",
                             visibilityWindow: 10000000
@@ -340,8 +323,6 @@ class SNPSearch extends React.Component {
             }else{
                 igvOptions = {
                     genome: 'hg38', 
-                    //locus: 'BRCA1'
-                    //locus: "chr8:118835887-119042590",
                     locus: this.state.locus_range,
                     thickness: 2,
                     tracks: [
@@ -355,8 +336,6 @@ class SNPSearch extends React.Component {
                         {
                             type: "wig",
                             format: "bigwig",
-                            //color: "black",
-                            //url: "http://localhost:3000/igv/bigwig/hMSC/ATAC_seq-hMSC_pvalue.bigwig",
                             url: this.state.atac_url,
                             height: 50,
                             name: "ATAC-seq",
@@ -364,8 +343,6 @@ class SNPSearch extends React.Component {
                         {
                             type: "wig",
                             format: "bigwig",
-                            //color: "black",
-                            //url: "http://localhost:3000/igv/bigwig/hMSC/DNase_seq_hMSC.bigWig",
                             url: this.state.dnase_url,
                             height: 50,
                             name: "Dnase-seq",
@@ -373,7 +350,6 @@ class SNPSearch extends React.Component {
                         {
                             type: "annotation",
                             format: "bed",
-                            //url: "http://localhost:3000/igv/bigwig/hMSC/E026_25_imputed12marks_hg38lift_dense.bed",
                             url: this.state.chromHMM_url,
                             height: 50,
                             name: "ChromHMM",
@@ -382,8 +358,6 @@ class SNPSearch extends React.Component {
                         {
                             type: "wig",
                             format: "bigwig",
-                            //color: "black",
-                            //url: "http://localhost:3000/igv/bigwig/hMSC/ENCFF223NOV_hMSC_H3K27Ac_pvalue.bigWig",
                             url: this.state.H3k27ac_url,
                             height: 50,
                             name: "H3k27ac",
@@ -392,8 +366,6 @@ class SNPSearch extends React.Component {
                         {
                             type: "wig",
                             format: "bigwig",
-                            //color: "black",
-                            //url: "http://localhost:3000/igv/bigwig/hMSC/ENCFF648BRC_hMSC_H3K4me1_pvalue.bigWig",
                             url: this.state.H3k4me1_url,
                             height: 50,
                             name: "H3k4me1",
@@ -402,8 +374,6 @@ class SNPSearch extends React.Component {
                         {
                             type: "wig",
                             format: "bigwig",
-                            //color: "black",
-                            //url: "http://localhost:3000/igv/bigwig/hMSC/ENCFF611FKW_hMSC_H3K4me3_pvalue.bigWig",
                             url: this.state.H3k4me3_url,
                             height: 50,
                             name: "H3k4me3",
@@ -421,10 +391,8 @@ class SNPSearch extends React.Component {
                         {
                             type: "annotation",
                             format: "gtf",
-                            url: this.state.gencode_url,
-                            indexURL: this.state.gencode_url + '.tbi',
-                            //indexURL: "http://localhost:3000/igv/gencode.v35.annotation.sort.gtf.gz.tbi",
-                            //displayMode: "SQUISHED",
+                            url: process.env.REACT_APP_BASE_URL + '/igv/gencode.v35.annotation.sort.gtf.gz',
+                            indexURL: process.env.REACT_APP_BASE_URL + '/igv/gencode.v35.annotation.sort.gtf.gz.tbi',
                             displayMode: "EXPANDED",
                             name: "Gencode v35 (gtf)",
                             visibilityWindow: 10000000
@@ -495,8 +463,6 @@ class SNPSearch extends React.Component {
             //console.log('start_min:' + start_min + "; end_max:" + end_max)
             //console.log(igv_bedpe_content)
             this.setState({
-                
-                //locus_hic_url: "http://localhost:3000/igv/" + this.state.rsid + "_" + this.state.cell + ".bedpe.txt",
                 locus_hic_url: process.env.REACT_APP_BASE_URL + "/igv/" + this.state.rsid + "_" + this.state.cell + ".bedpe.txt",
                 promoters: res_promoter.data,
                 promoterResults: true
@@ -571,8 +537,6 @@ class SNPSearch extends React.Component {
             ref: annotation.Ref,
             alt: annotation.Alt,
             rsid_url: "https://www.ncbi.nlm.nih.gov/snp/" + this.state.rsid,
-            encode_ccre_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/encodeCcreCombined.bb',
-            gencode_url: process.env.REACT_APP_BASE_URL + '/igv/gencode.v35.annotation.sort.gtf.gz',
             locus_snp_url: process.env.REACT_APP_BASE_URL + "/igv/" + this.state.rsid + ".bed",
             dataHorizontal1000G: dataHorizontal1000G_update,
             dataHorizontalgnomad: dataHorizontalgnomad_update,
