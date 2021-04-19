@@ -76,17 +76,17 @@ class DiseaseSearch extends React.Component {
 
     getTrait = async () => {
         try{
-            const res = await axios.get('http://localhost:5000/disease/')
-            console.log(res.data);
+            const res = await axios.get(process.env.REACT_APP_EXPRESS_URL + '/disease/')
+            //console.log(res.data);
             var hintArray = []
             res.data.map(a => hintArray.push(a.Disease_trait))
-            console.log(hintArray)
+            //console.log(hintArray)
             this.setState({hintData: hintArray})
             const searchResults = res.data.map((i,no) => ({
                 id: no,
                 name: i.Disease_trait,
             }));
-            console.log(searchResults)
+            //console.log(searchResults)
             this.setState({
                 options: searchResults,
                 isLoading: false
@@ -106,13 +106,9 @@ class DiseaseSearch extends React.Component {
           //alert(trait_name)
           this.setState({isLoading: true})
           //console.log(this.state.trait_name);
-          //var trait_url = "http://localhost:5000/disease/" + this.state.trait_name.replaceAll(' ', '%20');
-          var trait_url = "http://localhost:5000/disease/" + term.replaceAll(' ', '%20');
+          var trait_url = process.env.REACT_APP_EXPRESS_URL + "/disease/" + term.replaceAll(' ', '%20');
           console.log(trait_url);
-          const data = await axios.get(
-              trait_url
-               //"http://localhost:5000/disease/Heel%20bone%20mineral%20density"
-           );
+          const data = await axios.get(trait_url);
            console.log(data);
            if(!data.data.length) {
                this.setState({snpResults: false})
@@ -134,7 +130,7 @@ class DiseaseSearch extends React.Component {
     handleSearch = async() => {
         try{
             this.setState({isLoading: true})
-            const res = await axios.get('http://localhost:5000/disease/')
+            const res = await axios.get(process.env.REACT_APP_EXPRESS_URL + '/disease/')
             //console.log(res);
             console.log(res.data)
             const searchResults = res.data.map((i) => ({
