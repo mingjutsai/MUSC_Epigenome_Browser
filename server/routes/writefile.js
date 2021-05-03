@@ -11,7 +11,7 @@ router.route('/').post((req, res) => {
         igvInput = igvDir + rsid + '.bed'
         //const filePath = __dirname + '/../../public/igv/'
         if(fs.existsSync(igvDir)){
-            console.log('Directory exists!')
+            //console.log('Directory exists!')
             //fs.writeFile('../public/igv/' + rsid + '.bed', content, err => {
             fs.writeFile(igvInput, content, err => {
                     if(err) {

@@ -1,5 +1,6 @@
 import Dashboard from './pages/Dashboard';
 import SNPSearch from './pages/SNPSearch';
+import CellSNP from './pages/CellSNP';
 import GeneSearch from './pages/GeneSearch';
 import DiseaseSearch from './pages/DiseaseSearch';
 import Buttons from './elements/Buttons';
@@ -36,6 +37,11 @@ const pageList = [
     name: 'SNPSearch',
     path: '/snp',
     component: SNPSearch,
+  },
+  {
+    name: CellSNP,
+    path: '/snps/hMSC/:rsid',
+    component: CellSNP,
   },
   {
     name: 'GeneSearch',

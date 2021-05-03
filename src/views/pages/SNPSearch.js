@@ -6,6 +6,8 @@ import { HorizontalBar } from 'react-chartjs-2';
 import { MDBContainer } from 'mdbreact';
 import igv from 'igv';
 import { Loader } from '../../vibe/';
+import ToolkitProvider, { CSVExport } from 'react-bootstrap-table2-toolkit';
+
 
 import {
     Button,
@@ -129,7 +131,7 @@ class SNPSearch extends React.Component {
         // ];
         this.PromoterColumns = [
             { dataField: "Chr", text: "Promoter"},
-            { dataField: "Gene", text: "Gene" },
+            { dataField: "Gene", text: "Gene", sort: true },
             { dataField: "Gene_TPM", text: "Gene(TPM)" },
             { dataField: "TSS", text: "TSS" },
             { dataField: "Transcript", text: "Transcript"},
@@ -210,6 +212,14 @@ class SNPSearch extends React.Component {
                     //locus: "chr8:118835887-119042590",
                     locus: this.state.locus_range,
                     thickness: 2,
+                    roi: [
+                        {
+                            name: this.state.rsid,
+                            url: this.state.locus_snp_url,
+                            indexed: false,
+                            color: "rgba(68, 134, 247, 0.25)"
+                        }
+                    ],
                     tracks: [
                         {
                             url: this.state.locus_hic_url,
@@ -325,6 +335,14 @@ class SNPSearch extends React.Component {
                     genome: 'hg38', 
                     locus: this.state.locus_range,
                     thickness: 2,
+                    roi: [
+                        {
+                            name: this.state.rsid,
+                            url: this.state.locus_snp_url,
+                            indexed: false,
+                            color: "rgba(68, 134, 247, 0.25)"
+                        }
+                    ],
                     tracks: [
                         {
                             type: "annotation",
@@ -650,8 +668,8 @@ class SNPSearch extends React.Component {
             }
         }
         if(this.state.promoterResults == false){
-            var start_pos = parseInt(this.state.pos) - 10000
-            var end_pos = parseInt(this.state.pos) + 10000
+            var start_pos = parseInt(this.state.pos) - 50000
+            var end_pos = parseInt(this.state.pos) + 50000
             if (start_pos < 0){
                 start_pos = 0
             }
@@ -734,6 +752,18 @@ class SNPSearch extends React.Component {
     }
     render() {
         //const igv_ele = this.getIGV();
+        const ExportCSV = (props) => {
+            const handleClick = () => {
+                props.onExport();
+            };
+            return (
+                <div>
+                    {/* <Button color="secondary"><i className="fa fa-cloud-download" onClick={ handleClick }></i>&nbsp;&nbsp;Export CSV</Button> */}
+                    {/* <button className="btn btn-success" onClick={ handleClick }>Export to CSV</button> */}
+                    <Button className="fa fa-cloud-download" onClick={ handleClick }>Export to CSV</Button>
+                </div>
+            );
+        };
         return (
             <div className="content">
                 <Row>
@@ -917,7 +947,33 @@ class SNPSearch extends React.Component {
                                 </CardHeader>
                                 <CardBody>
                                 <div className="content">
-                                    <BootstrapTable
+                                    <ToolkitProvider
+                                        keyField="_id"
+                                        data={this.state.promoters}
+                                        columns={this.PromoterColumns}
+                                        exportCSV={{
+                                            fileName: this.state.rsid + '_' + this.state.cell + '_hic_promoter.csv',
+                                            //separator: '\t',
+                                        }}
+                                    >
+                                        {
+                                            props => (
+                                            <div>
+                                                {/* <CSVExport.ExportCSVButton { ...props.csvProps }>Export CSV</CSVExport.ExportCSVButton> */}
+                                                <ExportCSV { ...props.csvProps } />
+                                                <hr />
+                                                <BootstrapTable
+                                                    pagination={paginationFactory(this.options)}
+                                                    striped
+                                                    hover
+                                                    condensed
+                                                    { ...props.baseProps }
+                                                />
+                                            </div>
+                                            )
+                                        }
+                                    </ToolkitProvider>
+                                    {/* <BootstrapTable
                                         keyField="_id"
                                         data={this.state.promoters}
                                         columns={this.PromoterColumns}
@@ -925,7 +981,7 @@ class SNPSearch extends React.Component {
                                         hover
                                         condensed
                                         pagination={paginationFactory()}
-                                    />       
+                                    />        */}
                                 </div>
                                 </CardBody>
                             </Card>
