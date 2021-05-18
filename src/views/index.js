@@ -40,7 +40,7 @@ const pageList = [
   },
   {
     name: CellSNP,
-    path: '/snps/hMSC/:rsid',
+    path: '/snps/:cell/:variantID',
     component: CellSNP,
   },
   {

@@ -40,7 +40,7 @@ router.route('/').post((req, res) => {
         fs.writeFile(igvInput, content, err => {
             if(err) {
                 console.log(err)
-                return
+                return err
             }
         })
     }else if(req.body.type == "interactionByGene"){
@@ -52,7 +52,17 @@ router.route('/').post((req, res) => {
         fs.writeFile(igvInput, content, err => {
             if(err) {
                 console.log(err)
-                return
+                return err
+            }
+        })
+    }else if(req.body.type == "LD"){
+        const indexSNP = req.body.indexSNP;
+        const content = req.body.content;
+        igvInput = igvDir + indexSNP + '_LD.bed';
+        fs.writeFile(igvInput, content, err => {
+            if(err) {
+                console.log(err)
+                return err
             }
         })
     }

@@ -115,11 +115,11 @@ class GeneSearch extends React.Component {
     }
 
     componentDidMount() {
-        console.log("showIGV state" + this.state.showIGV)
+        //console.log("showIGV state" + this.state.showIGV)
     }
     componentDidUpdate(prevProps, prevState) {
-        if(prevState.showIGV !== this.state.showIGV){
-            console.log('showIGV state has changed:' + this.state.showIGV);
+        if(this.state.showIGV && prevState.showIGV !== this.state.showIGV){
+            //console.log('showIGV state has changed:' + this.state.showIGV);
             //console.log('range state has changed:' + this.state.locus_range)
             //console.log('prevState.locus_range:' + prevState.locus_range)
             
@@ -290,7 +290,7 @@ class GeneSearch extends React.Component {
                     H3k4me1_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF103BYE_H3K4me1_OB_pvalue.bigWig',
                 })
             }
-            console.log(promoter_api_url)
+            //console.log(promoter_api_url)
             const res_promoter = await axios.get(promoter_api_url);
             var promoter_update = res_promoter.data
             var igv_bedpe_content;
@@ -341,14 +341,14 @@ class GeneSearch extends React.Component {
                 }),
             });
             const writeRes = await response.text();
-            console.log("write file:")
-            console.log(writeRes)
+            //console.log("write file:")
+            //console.log(writeRes)
             var start_pos = parseInt(start_min) - 10000
             var end_pos = parseInt(end_max) + 10000
             if (start_pos < 0){
                 start_pos = 0
             }
-            console.log("locus range:chr" + hicPromoterBinChr + ":" + start_pos + "-" + end_pos)
+            //console.log("locus range:chr" + hicPromoterBinChr + ":" + start_pos + "-" + end_pos)
             this.setState({
                 locus_range: "chr" + hicPromoterBinChr + ":" + start_pos + "-" + end_pos,
                 locus_hic_url: process.env.REACT_APP_BASE_URL + "/igv/" + this.state.gene + "_" + this.state.cell + ".bedpe.txt",
@@ -368,9 +368,9 @@ class GeneSearch extends React.Component {
           //alert(trait_name)
           //console.log(this.state.trait_name);
           var snp_url = process.env.REACT_APP_EXPRESS_URL + "/snp2gene/" + this.state.gene;
-          console.log(snp_url);
+          //console.log(snp_url);
           const res = await axios.get(snp_url);
-          console.log(res.data);
+          //console.log(res.data);
           //console.log("type of data:" + typeof res.data)
           if(!res.data.length) {
             this.setState({
@@ -383,8 +383,8 @@ class GeneSearch extends React.Component {
                 snps: res.data,
             })
             const res_generateIGV = await this.generateIGVFile();
-            console.log("res_generateIGV:")
-            console.log(res_generateIGV);
+            //console.log("res_generateIGV:")
+            //console.log(res_generateIGV);
             
           }
           
@@ -401,8 +401,8 @@ class GeneSearch extends React.Component {
     }
     
     handleSubmit = (event) => {
-        console.log(this.state.gene);
-        console.log(this.state.cell);
+        //console.log(this.state.gene);
+        //console.log(this.state.cell);
         this.setState({
             showTable: false,
             snpResults: false,

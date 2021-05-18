@@ -45,6 +45,8 @@ const promoterOB2geneRouter = require('./routes/promoterOB2gene')
 const promoterOCRouter = require('./routes/promoterOC');
 const promoterOC2geneRouter = require('./routes/promoterOC2gene')
 const writeLocalFile = require('./routes/writefile');
+const gwasLD = require('./routes/gwasLD');
+const variantID = require('./routes/variantID');
 
 app.use('/snp', snpRouter);
 app.use('/snp2gene', snp2geneRouter);
@@ -56,6 +58,8 @@ app.use('/promoterOB2gene', promoterOB2geneRouter);
 app.use('/promoterOC',promoterOCRouter);
 app.use('/promoterOC2gene', promoterOC2geneRouter);
 app.use('/writeFile', writeLocalFile);
+app.use('/gwasLD', gwasLD);
+app.use('/variantID', variantID);
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
 });

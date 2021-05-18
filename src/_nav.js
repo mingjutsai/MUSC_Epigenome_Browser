@@ -20,6 +20,8 @@ export default {
       url: '/disease',
       icon: 'Layers',
     },
+
+
     // {
     //   name: 'UI Elements',
     //   icon: 'Layers',
@@ -122,6 +124,8 @@ export default {
     //     },
     //   ],
     // },
+
+
     // {
     //   divider: true,
     // },

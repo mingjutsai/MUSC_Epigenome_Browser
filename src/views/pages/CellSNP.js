@@ -40,7 +40,7 @@ class CellSNP extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            cell: 'hMSC',
+            cell: '',
             snps: [],
             selectedSNP: [],
             promoters: [],
@@ -48,6 +48,7 @@ class CellSNP extends React.Component {
             pos: '',
             ref: '',
             alt: '',
+            rsid: '',
             rsid_url: '',
             locus_range: '',
             locus_hic_url: '',
@@ -185,6 +186,9 @@ class CellSNP extends React.Component {
         }
       }    
     componentDidMount() {
+        this.setState({
+            cell: this.props.match.params.cell,
+        })
         this.getSNPData();
         //console.log("componentDidMount locus_range" + this.state.locus_range)
     }
@@ -207,7 +211,7 @@ class CellSNP extends React.Component {
                     thickness: 2,
                     roi: [
                         {
-                            name: this.props.match.params.rsid,
+                            name: this.state.rsid,
                             url: this.state.locus_snp_url,
                             indexed: false,
                             color: "rgba(68, 134, 247, 0.25)"
@@ -219,9 +223,9 @@ class CellSNP extends React.Component {
                             type: "interaction",
                             format: "bedpe",
                             name: "Significant Hi-C",
-                            //arcType: "proportional",
+                            arcType: "proportional",
                             useScore: true,
-                            arcType: "nested",
+                            //arcType: "nested",
                             //color: "rgb(0,200,0)",
                             color: "blue",
                             //alpha: "0.05",
@@ -246,7 +250,7 @@ class CellSNP extends React.Component {
                             format: "bed",
                             url: this.state.locus_snp_url,
                             indexURL: false,
-                            name: this.props.match.params.rsid,
+                            name: this.state.rsid,
                         },
                         {
                             type: "wig",
@@ -293,6 +297,14 @@ class CellSNP extends React.Component {
                             height: 50,
                             name: "H3k4me3",
                             color: "rgb(252, 74, 3)",
+                        },
+                        {
+                            type: "annotation",
+                            format: "bed",
+                            url: process.env.REACT_APP_BASE_URL + "/igv/promoter_like_regions_annotation_sorted.bed",
+                            height: 50,
+                            name: "Promoter-like-region",
+                            displayMode: "EXPANDED",
                         },
                         {
                             type: "annotation",
@@ -330,7 +342,7 @@ class CellSNP extends React.Component {
                     thickness: 2,
                     roi: [
                         {
-                            name: this.props.match.params.rsid,
+                            name: this.state.rsid,
                             url: this.state.locus_snp_url,
                             indexed: false,
                             color: "rgba(68, 134, 247, 0.25)"
@@ -342,7 +354,7 @@ class CellSNP extends React.Component {
                             format: "bed",
                             url: this.state.locus_snp_url,
                             indexURL: false,
-                            name: this.props.match.params.rsid,
+                            name: this.state.rsid,
                         },
                         {
                             type: "wig",
@@ -389,6 +401,23 @@ class CellSNP extends React.Component {
                             height: 50,
                             name: "H3k4me3",
                             color: "rgb(252, 74, 3)",
+                        },
+                        {
+                            type: "annotation",
+                            format: "bed",
+                            url: process.env.REACT_APP_BASE_URL + "/igv/promoter_like_regions_annotation_sorted.bed",
+                            height: 50,
+                            name: "Promoter-like-region",
+                            displayMode: "EXPANDED",
+                        },
+                        {
+                            type: "annotation",
+                            format: "bb",
+                            //url: "http://localhost:3000/igv/bigwig/encodeCcreCombined.bb",
+                            url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/encodeCcreCombined.bb',
+                            height: 50,
+                            name: "ENCODE-cCRE",
+                            displayMode: "EXPANDED",
                         },
                         // {   
                         //     type: "wig",
@@ -449,9 +478,40 @@ class CellSNP extends React.Component {
                 const hicPromoterBinChr = hicPromoterBin[0];
                 const hicPromoterBinStart = hicPromoterBin[1];
                 const hicPromoterBinEnd = hicPromoterBin[2];
-                console.log(hicPromoterBinChr)
-                console.log(hicPromoterBinStart)
-                console.log(hicPromoterBinEnd)
+                var each_interaction;
+                const hicInfo = promoter_update[i].HiC_info.split('|')
+                if(hicInfo.length > 1){
+                    for(var index=0;index<hicInfo.length;index++){
+                        console.log(hicInfo[index])
+                        const info = hicInfo[index].split(':')
+                        const qvalue = info[3]
+                        console.log(qvalue)
+                        const neglog_qvalue = -Math.log10(qvalue)
+                        console.log(neglog_qvalue)
+                        //each_interaction = reg_content + "\t" + promoter_update[i].Chr + "\t" + promoter_update[i].Start + "\t" + promoter_update[i].End + "\t" + neglog_qvalue + "\n";
+                        each_interaction = reg_content + "\tchr" + hicPromoterBinChr + "\t" + hicPromoterBinStart + "\t" + hicPromoterBinEnd + "\t" + neglog_qvalue + "\n";
+                        if(igv_bedpe_content == null){
+                            igv_bedpe_content = each_interaction
+                        }else{
+                            igv_bedpe_content += each_interaction
+                        }
+                    }
+                }else{
+                    const info = hicInfo[0].split(':')
+                        const qvalue = info[3]
+                        console.log(qvalue)
+                        const neglog_qvalue = -Math.log10(qvalue)
+                        console.log(neglog_qvalue)
+                        //each_interaction = reg_content + "\t" + promoter_update[i].Chr + "\t" + promoter_update[i].Start + "\t" + promoter_update[i].End + "\t" + neglog_qvalue + "\n";
+                        each_interaction = reg_content + "\tchr" + hicPromoterBinChr + "\t" + hicPromoterBinStart + "\t" + hicPromoterBinEnd + "\t" + neglog_qvalue + "\n";
+                        if(igv_bedpe_content == null){
+                            igv_bedpe_content = each_interaction
+                        }else{
+                            igv_bedpe_content += each_interaction
+                        }
+                }
+
+
                 if(promoter_update[i].Start < start_min){
                 //if(hicPromoterBinStart < start_min){
                     start_min = hicPromoterBinStart
@@ -459,13 +519,13 @@ class CellSNP extends React.Component {
                 if(hicPromoterBinEnd > end_max){
                     end_max = hicPromoterBinEnd
                 }
-                var each_interaction = reg_content + "\t" + promoter_update[i].Chr + "\t" + promoter_update[i].Start + "\t" + promoter_update[i].End + "\t10\n";
-                //var each_interaction = reg_content + "\t" + hicPromoterBinChr + "\t" + hicPromoterBinStart + "\t" + hicPromoterBinEnd + "\t10\n";
-                if(igv_bedpe_content == null){
-                    igv_bedpe_content = each_interaction
-                }else{
-                    igv_bedpe_content += each_interaction
-                }
+                // var each_interaction = reg_content + "\t" + promoter_update[i].Chr + "\t" + promoter_update[i].Start + "\t" + promoter_update[i].End + "\t10\n";
+                // //var each_interaction = reg_content + "\t" + hicPromoterBinChr + "\t" + hicPromoterBinStart + "\t" + hicPromoterBinEnd + "\t10\n";
+                // if(igv_bedpe_content == null){
+                //     igv_bedpe_content = each_interaction
+                // }else{
+                //     igv_bedpe_content += each_interaction
+                // }
                 
                 //console.log('each_interaction:' + each_interaction)
                 promoter_update[i].Chr = promoter_update[i].Chr + ":" + promoter_update[i].Start + "-" + promoter_update[i].End
@@ -474,7 +534,7 @@ class CellSNP extends React.Component {
             //console.log('start_min:' + start_min + "; end_max:" + end_max)
             //console.log(igv_bedpe_content)
             this.setState({
-                locus_hic_url: process.env.REACT_APP_BASE_URL + "/igv/" + this.props.match.params.rsid + "_" + this.state.cell + ".bedpe.txt",
+                locus_hic_url: process.env.REACT_APP_BASE_URL + "/igv/" + this.state.rsid + "_" + this.state.cell + ".bedpe.txt",
                 promoters: res_promoter.data,
                 promoterResults: true
             })
@@ -487,6 +547,7 @@ class CellSNP extends React.Component {
                 body: JSON.stringify({
                     type: "interaction",
                     cell: this.state.cell,
+                    rsid: this.state.rsid,
                     content: igv_bedpe_content,
                 }),
             });
@@ -528,8 +589,12 @@ class CellSNP extends React.Component {
         console.log(arr)
         //var arr = JSON.parse(JSON.stringify(anno_json));
         //console.log("arr:" + arr)
-        this.setState({ selectedSNP: arr})
-
+        const id = annotation.RSID;
+        this.setState({
+            rsid: id,
+            selectedSNP: arr
+        })
+        
         console.log("Alt:" + annotation.Alt)
         var dataHorizontal1000G_update = {...this.state.dataHorizontal1000G};
         var dataHorizontalgnomad_update = {...this.state.dataHorizontalgnomad};
@@ -538,7 +603,7 @@ class CellSNP extends React.Component {
         dataHorizontal1000G_update.datasets[0].data = AF_1000G;
         dataHorizontalgnomad_update.datasets[0].data = AF_gnomad;
         dataHorizontalgnomad_update.datasets[0].label = "gnomAD";
-        var rsidURL = "https://www.ncbi.nlm.nih.gov/snp/" + this.props.match.params.rsid;
+        //var rsidURL = "https://www.ncbi.nlm.nih.gov/snp/" + id;
         //var rsidURL_igv = "http://localhost:3000/igv/" + this.state.rsid + ".bed";
         //var rsidURL_igv = process.env.REACT_APP_BASE_URL + "/igv/" + this.state.rsid + ".bed";
         this.setState({
@@ -546,8 +611,8 @@ class CellSNP extends React.Component {
             pos: annotation.Start,
             ref: annotation.Ref,
             alt: annotation.Alt,
-            rsid_url: "https://www.ncbi.nlm.nih.gov/snp/" + this.props.match.params.rsid,
-            locus_snp_url: process.env.REACT_APP_BASE_URL + "/igv/" + this.props.match.params.rsid + ".bed",
+            rsid_url: "https://www.ncbi.nlm.nih.gov/snp/" + id,
+            locus_snp_url: process.env.REACT_APP_BASE_URL + "/igv/" + id + ".bed",
             dataHorizontal1000G: dataHorizontal1000G_update,
             dataHorizontalgnomad: dataHorizontalgnomad_update,
         })
@@ -560,8 +625,8 @@ class CellSNP extends React.Component {
             },
             body: JSON.stringify({
                 type: "snp",
-                post: this.props.match.params.rsid,
-                range: "chr" + annotation["#Chr"] + "\t" + annotation.Start + "\t" + annotation.Start + "\t" + this.props.match.params.rsid,
+                post: id,
+                range: "chr" + annotation["#Chr"] + "\t" + annotation.Start + "\t" + annotation.Start + "\t" + id,
             }),
         });
         const writeRes = await response.text();
@@ -647,7 +712,15 @@ class CellSNP extends React.Component {
                 { dataField: "OpenChromatin_OB", text: "Open Chromatin"},
                 { dataField: "SigHiC_OC", text: "Sig Hi-C"},
             ]
-            this.setState({SNPColumns: columns_update})
+            this.setState({
+                SNPColumns: columns_update,
+                atac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ATAC_seq-osteoblast_pvalue.bigWig',
+                dnase_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/DNase_seq_osteoblast.bigWig',
+                chromHMM_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/E129_25_imputed12marks_hg38lift_dense.bed',
+                H3k27ac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF048BRN_H3K27ac_OB_p-value.bigWig',
+                H3k4me3_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF327MED_ H3K4me3_OB_pvalue.bigWig',
+                H3k4me1_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF103BYE_H3K4me1_OB_pvalue.bigWig',
+            })
             //var sigHiC = anno.SigHiC_OC
             if(annotation.SigHiC_OC){
                 this.setState({hic: annotation.SigHiC_OC});
@@ -683,11 +756,10 @@ class CellSNP extends React.Component {
           //alert(trait_name)
           //console.log(this.state.trait_name);
           //var snp_url = "http://localhost:5000/snp/" + this.state.rsid;
-          var snp_url = process.env.REACT_APP_EXPRESS_URL + "/snp/" + this.props.match.params.rsid;
+          var snp_url = process.env.REACT_APP_EXPRESS_URL + "/variantID/" + this.props.match.params.variantID;
           console.log(snp_url);
           const res = await axios.get(snp_url);
           console.log(res.data);
-          console.log("type of data:" + typeof res.data)
           if(!res.data.length) {
             this.setState({
                 snpResults: false,
@@ -739,13 +811,13 @@ class CellSNP extends React.Component {
                         ? <Col md="12">
                             <Card>
                                 <CardHeader>
-                                <CardTitle tag="h4">{this.props.match.params.rsid} has multiple SNPs</CardTitle>
+                                <CardTitle tag="h4">{this.props.match.params.variantID} has multiple SNPs</CardTitle>
                                 </CardHeader>
                                 <CardBody>
                                     <div className="content">
                                         <BootstrapTable
                                             keyField="_id"
-                                            data={this.props.match.params.rsid}
+                                            data={this.props.match.params.variantID}
                                             columns={this.MultiSNPColumns}
                                             //selectRow={this.onSelect}
                                             selectRow={this.selectRow }
@@ -766,6 +838,9 @@ class CellSNP extends React.Component {
                                 
                                 <CardBody>
                                     <h5>
+                                    GRCh38
+                                    </h5>
+                                    <h5>
                                     Chr: {this.state.chr} 
                                     </h5>
                                     <h5>
@@ -783,7 +858,7 @@ class CellSNP extends React.Component {
                                         href={this.state.rsid_url} 
                                         target="_blank"
                                         >
-                                        {this.props.match.params.rsid}
+                                        {this.state.rsid}
                                         </a>
                                     </h5>
                                 </CardBody>
@@ -826,7 +901,7 @@ class CellSNP extends React.Component {
                         ? <Col md="12">
                             <Card>
                                 <CardHeader>
-                                <CardTitle tag="h4">{this.props.match.params.rsid}'s IGV in {this.state.cell} cell-type</CardTitle>
+                                <CardTitle tag="h4">{this.state.rsid}'s IGV in {this.state.cell} cell-type</CardTitle>
                                 </CardHeader>
                                 <CardBody>
                                     <div id="igv-div" style={igvStyle}></div>
@@ -841,7 +916,7 @@ class CellSNP extends React.Component {
                             <Col md="12">
                                 <Card>
                                     <CardHeader>
-                                    <CardTitle tag="h4">{this.props.match.params.rsid} in {this.state.cell} cell-type</CardTitle>
+                                    <CardTitle tag="h4">{this.state.rsid} in {this.state.cell} cell-type</CardTitle>
                                     </CardHeader>
                                     <CardBody>
                                     <div className="SNPTable">
@@ -863,7 +938,7 @@ class CellSNP extends React.Component {
                                 <Col md="12">
                                 <Card>
                                     <CardHeader>
-                                    <CardTitle tag="h4">Can't find any {this.props.match.params.rsid} relevant SNPs</CardTitle>
+                                    <CardTitle tag="h4">Can't find any {this.props.match.params.variantID} relevant SNPs</CardTitle>
                                     </CardHeader>
                                 </Card>
                             </Col>
@@ -878,7 +953,7 @@ class CellSNP extends React.Component {
                         ? <Col md="12">
                             <Card>
                                 <CardHeader>
-                                <CardTitle tag="h4">{this.props.match.params.rsid}'s Hi-C interactions in {this.state.cell} cell-type</CardTitle>
+                                <CardTitle tag="h4">{this.state.rsid}'s Hi-C interactions in {this.state.cell} cell-type</CardTitle>
                                 </CardHeader>
                                 <CardBody>
                                 <div className="content">
@@ -887,7 +962,7 @@ class CellSNP extends React.Component {
                                         data={this.state.promoters}
                                         columns={this.PromoterColumns}
                                         exportCSV={{
-                                            fileName: this.props.match.params.rsid + '_' + this.state.cell + '_hic_promoter.csv',
+                                            fileName: this.state.rsid + '_' + this.state.cell + '_hic_promoter.csv',
                                             //separator: '\t',
                                         }}
                                     >

@@ -38,6 +38,7 @@ class SNPSearch extends React.Component {
         this.state = {
             rsid: '',
             cell: 'hMSC',
+            //cell: '',
             snps: [],
             selectedSNP: [],
             promoters: [],
@@ -174,6 +175,7 @@ class SNPSearch extends React.Component {
         this.selectRow = {
             mode: 'radio',
             clickToSelect: true,
+            style: { backgroundColor: '#c8e6c9' },
             onSelect: this.handleOnSelect,
         };
         
@@ -181,28 +183,30 @@ class SNPSearch extends React.Component {
 
     handleOnSelect = (row, isSelect, rowIndex, e) => {
         if (isSelect) {
-            console.log("rowIndex:" + rowIndex)
+            //console.log("rowIndex:" + rowIndex)
             this.setState({selectRowNo: rowIndex})
             //console.log(this.selectRowNo)
             //this.state.selectRowNo = 0 + rowIndex
             
             const res_generateTable = this.generateTableData(rowIndex);
-            console.log("Finish generateTable:")
-            console.log(res_generateTable);
+            //console.log("Finish generateTable:")
+            //console.log(res_generateTable);
             
         }
       }    
     componentDidMount() {
-        console.log("componentDidMount locus_range" + this.state.locus_range)
+        //console.log("componentDidMount locus_range" + this.state.locus_range)
     }
     componentDidUpdate(prevProps, prevState) {
         var regex = /^chr/;
         //if(prevState.locus_range !== this.state.locus_range && regex.test(this.state.locus_range) ) {
-        if(prevState.showIGV !== this.state.showIGV){
-            console.log('showIGV state has changed:' + this.state.showIGV);
+        //if(prevState.showIGV !== this.state.showIGV){
+        if(this.state.showIGV && prevState.showIGV !== this.state.showIGV){
+        //if(prevState.cell !== this.state.cell){
+            //console.log('showIGV state has changed:' + this.state.showIGV);
             //console.log('range state has changed:' + this.state.locus_range)
             //console.log('prevState.locus_range:' + prevState.locus_range)
-            
+            //console.log('cell-type state has changed:' + this.state.cell);
             var igvContainer = document.getElementById('igv-div');
             var igvOptions;
             if(this.state.promoterResults){
@@ -226,9 +230,9 @@ class SNPSearch extends React.Component {
                             type: "interaction",
                             format: "bedpe",
                             name: "Significant Hi-C",
-                            //arcType: "proportional",
+                            arcType: "proportional",
                             useScore: true,
-                            arcType: "nested",
+                            //arcType: "nested",
                             //color: "rgb(0,200,0)",
                             color: "blue",
                             //alpha: "0.05",
@@ -300,6 +304,14 @@ class SNPSearch extends React.Component {
                             height: 50,
                             name: "H3k4me3",
                             color: "rgb(252, 74, 3)",
+                        },
+                        {
+                            type: "annotation",
+                            format: "bed",
+                            url: process.env.REACT_APP_BASE_URL + "/igv/promoter_like_regions_annotation_sorted.bed",
+                            height: 50,
+                            name: "Promoter-like-region",
+                            displayMode: "EXPANDED",
                         },
                         {
                             type: "annotation",
@@ -408,6 +420,23 @@ class SNPSearch extends React.Component {
                         // },
                         {
                             type: "annotation",
+                            format: "bed",
+                            url: process.env.REACT_APP_BASE_URL + "/igv/promoter_like_regions_annotation_sorted.bed",
+                            height: 50,
+                            name: "Promoter-like-region",
+                            displayMode: "EXPANDED",
+                        },
+                        {
+                            type: "annotation",
+                            format: "bb",
+                            //url: "http://localhost:3000/igv/bigwig/encodeCcreCombined.bb",
+                            url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/encodeCcreCombined.bb',
+                            height: 50,
+                            name: "ENCODE-cCRE",
+                            displayMode: "EXPANDED",
+                        },
+                        {
+                            type: "annotation",
                             format: "gtf",
                             url: process.env.REACT_APP_BASE_URL + '/igv/gencode.v35.annotation.sort.gtf.gz',
                             indexURL: process.env.REACT_APP_BASE_URL + '/igv/gencode.v35.annotation.sort.gtf.gz.tbi',
@@ -428,13 +457,13 @@ class SNPSearch extends React.Component {
         //console.log(this.state.hic);
         let reg_bin_Re = RegExp('RegulatoryBin:(.*?);')
         let reg = reg_bin_Re.exec(this.state.hic)[1]
-        console.log("reg:" + reg)
+        //console.log("reg:" + reg)
         const reg_range = reg.split(':')
         var reg_content = "chr" + this.state.chr + "\t" + reg_range[1] + "\t" + reg_range[2];
         var igv_bedpe_content;
         var start_min = parseInt(reg_range[1])
         var end_max = parseInt(reg_range[2])
-        console.log('start_min:' + start_min + "; end_max:" + end_max)
+        //console.log('start_min:' + start_min + "; end_max:" + end_max)
         var promoter_api_url;
         if(this.state.cell === "hMSC"){
             promoter_api_url = process.env.REACT_APP_EXPRESS_URL + '/promoterhMSC/' + reg.replaceAll(':', '%3A');
@@ -446,19 +475,55 @@ class SNPSearch extends React.Component {
             //promoter_api_url = "http://localhost:5000/promoterOC/" + reg.replaceAll(':', '%3A');
             promoter_api_url = process.env.REACT_APP_EXPRESS_URL + '/promoterOC/' + reg.replaceAll(':', '%3A');
         }
-        console.log(promoter_api_url);
+        //console.log(promoter_api_url);
         try{
             const res_promoter = await axios.get(promoter_api_url);
-            console.log(res_promoter.data)
+            //console.log("promoter.data")
+            //console.log(res_promoter.data)
             var promoter_update = res_promoter.data
             for(var i=0;i<promoter_update.length;i++){
                 const hicPromoterBin = promoter_update[i].HiC_Promoter_bin.split(':')
                 const hicPromoterBinChr = hicPromoterBin[0];
                 const hicPromoterBinStart = hicPromoterBin[1];
                 const hicPromoterBinEnd = hicPromoterBin[2];
-                console.log(hicPromoterBinChr)
-                console.log(hicPromoterBinStart)
-                console.log(hicPromoterBinEnd)
+                // console.log(hicPromoterBinChr)
+                // console.log(hicPromoterBinStart)
+                // console.log(hicPromoterBinEnd)
+                var each_interaction;
+                const hicInfo = promoter_update[i].HiC_info.split('|')
+                if(hicInfo.length > 1){
+                    for(var index=0;index<hicInfo.length;index++){
+                        //console.log(hicInfo[index])
+                        const info = hicInfo[index].split(':')
+                        const qvalue = info[3]
+                        //console.log(qvalue)
+                        const neglog_qvalue = -Math.log10(qvalue)
+                        //console.log(neglog_qvalue)
+                        //each_interaction = reg_content + "\t" + promoter_update[i].Chr + "\t" + promoter_update[i].Start + "\t" + promoter_update[i].End + "\t" + neglog_qvalue + "\n";
+                        each_interaction = reg_content + "\tchr" + hicPromoterBinChr + "\t" + hicPromoterBinStart + "\t" + hicPromoterBinEnd + "\t" + neglog_qvalue + "\n";
+                        if(igv_bedpe_content == null){
+                            igv_bedpe_content = each_interaction
+                        }else{
+                            igv_bedpe_content += each_interaction
+                        }
+                    }
+                }else{
+                    const info = hicInfo[0].split(':')
+                        const qvalue = info[3]
+                        //console.log(qvalue)
+                        const neglog_qvalue = -Math.log10(qvalue)
+                        //console.log(neglog_qvalue)
+                        //each_interaction = reg_content + "\t" + promoter_update[i].Chr + "\t" + promoter_update[i].Start + "\t" + promoter_update[i].End + "\t" + neglog_qvalue + "\n";
+                        each_interaction = reg_content + "\tchr" + hicPromoterBinChr + "\t" + hicPromoterBinStart + "\t" + hicPromoterBinEnd + "\t" + neglog_qvalue + "\n";
+                        if(igv_bedpe_content == null){
+                            igv_bedpe_content = each_interaction
+                        }else{
+                            igv_bedpe_content += each_interaction
+                        }
+                }
+                //console.log(hicPromoterBinChr)
+                //console.log(hicPromoterBinStart)
+                //console.log(hicPromoterBinEnd)
                 if(promoter_update[i].Start < start_min){
                 //if(hicPromoterBinStart < start_min){
                     start_min = hicPromoterBinStart
@@ -466,13 +531,13 @@ class SNPSearch extends React.Component {
                 if(hicPromoterBinEnd > end_max){
                     end_max = hicPromoterBinEnd
                 }
-                var each_interaction = reg_content + "\t" + promoter_update[i].Chr + "\t" + promoter_update[i].Start + "\t" + promoter_update[i].End + "\t10\n";
+                //var each_interaction = reg_content + "\t" + promoter_update[i].Chr + "\t" + promoter_update[i].Start + "\t" + promoter_update[i].End + "\t10\n";
                 //var each_interaction = reg_content + "\t" + hicPromoterBinChr + "\t" + hicPromoterBinStart + "\t" + hicPromoterBinEnd + "\t10\n";
-                if(igv_bedpe_content == null){
-                    igv_bedpe_content = each_interaction
-                }else{
-                    igv_bedpe_content += each_interaction
-                }
+                // if(igv_bedpe_content == null){
+                //     igv_bedpe_content = each_interaction
+                // }else{
+                //     igv_bedpe_content += each_interaction
+                // }
                 
                 //console.log('each_interaction:' + each_interaction)
                 promoter_update[i].Chr = promoter_update[i].Chr + ":" + promoter_update[i].Start + "-" + promoter_update[i].End
@@ -499,21 +564,21 @@ class SNPSearch extends React.Component {
                 }),
             });
             const writeRes = await response.text();
-            console.log("write file:")
-            console.log(writeRes)
+            //console.log("write file:")
+            //console.log(writeRes)
 
             var final_render_sigHiC = this.state.hic.replaceAll(';', '\n');
             final_render_sigHiC = final_render_sigHiC.replaceAll('RegulatoryBin:', 'RegulatoryBin\n')
             final_render_sigHiC = final_render_sigHiC.replaceAll('RegulatoryBin:', 'RegulatoryBin\n')
             final_render_sigHiC = final_render_sigHiC.replaceAll(',', '\n')
-            console.log("clean hic:" + final_render_sigHiC)
+            //console.log("clean hic:" + final_render_sigHiC)
             var start_pos = parseInt(start_min) - 10000
             var end_pos = parseInt(end_max) + 10000
             if (start_pos < 0){
                 start_pos = 0
             }
             this.setState({ locus_range: "chr" + this.state.chr + ":" + start_pos + "-" + end_pos})
-            console.log("locus_range:" + this.state.locus_range)
+            //console.log("locus_range:" + this.state.locus_range)
         } catch (error) {
             console.log(error);
         }
@@ -523,7 +588,7 @@ class SNPSearch extends React.Component {
     generateTableData = async (index) => {
         var annotation = this.state.snps[index];
         var anno_json = [...this.state.snps];
-        console.log('APP_URL:')
+        //console.log('APP_URL:')
         
         //console.log("origin anno_json:" + JSON.stringify(anno_json))
         var arr = [];
@@ -533,12 +598,12 @@ class SNPSearch extends React.Component {
             }
         }
         //console.log("selectRowNo:" + this.state.selectRowNo)
-        console.log(arr)
+        //console.log(arr)
         //var arr = JSON.parse(JSON.stringify(anno_json));
         //console.log("arr:" + arr)
         this.setState({ selectedSNP: arr})
 
-        console.log("Alt:" + annotation.Alt)
+        //console.log("Alt:" + annotation.Alt)
         var dataHorizontal1000G_update = {...this.state.dataHorizontal1000G};
         var dataHorizontalgnomad_update = {...this.state.dataHorizontalgnomad};
         var AF_1000G = [annotation["1000g_ALL"],annotation["1000g_AFR"],annotation["1000g_AMR"],annotation["1000g_EAS"],annotation["1000g_EUR"],annotation["1000g_SAS"]];
@@ -573,15 +638,15 @@ class SNPSearch extends React.Component {
             }),
         });
         const writeRes = await response.text();
-        console.log("write SNP file:")
-        console.log(writeRes)
+        //console.log("write SNP file:")
+        //console.log(writeRes)
         
         //const body = await response.text();
 
         //set cell-type specific annotation below
 
         if (this.state.cell === "hMSC") {
-            console.log("hMSC cell-type processing...")
+            //console.log("hMSC cell-type processing...")
             var columns_update = [
                 { dataField: "Region_Ensembl", text: "Region" },
                 { dataField: "GeneName_ID_Ensembl", text: "Gene" },
@@ -608,14 +673,14 @@ class SNPSearch extends React.Component {
                 this.setState({hic: annotation.SigHiC_hMSC});
                 //this.hicProcess();
                 const hicProcess_res = await this.hicProcess();
-                console.log("hicProcess_res:")
-                console.log(hicProcess_res);
+                //console.log("hicProcess_res:")
+                //console.log(hicProcess_res);
             }else{
                 this.setState({ promoterResults: false})
             }
             
         }else if(this.state.cell === "Osteoblast"){
-            console.log("Osteoblast cell-type processing...")
+            //console.log("Osteoblast cell-type processing...")
             var columns_update = [
                 { dataField: "Region_Ensembl", text: "Region" },
                 { dataField: "GeneName_ID_Ensembl", text: "Gene" },
@@ -639,13 +704,13 @@ class SNPSearch extends React.Component {
                 this.setState({hic: annotation.SigHiC_OB13});
                 //this.hicProcess();
                 const hicProcess_res = await this.hicProcess();
-                console.log("hicProcess_res:")
-                console.log(hicProcess_res);
+                //console.log("hicProcess_res:")
+                //console.log(hicProcess_res);
             }else{
                 this.setState({ promoterResults: false})
             }
         }else{
-            console.log("Osteocyte cell-type processing...")
+            //console.log("Osteocyte cell-type processing...")
             var columns_update = [
                 { dataField: "Region_Ensembl", text: "Region" },
                 { dataField: "GeneName_ID_Ensembl", text: "Gene" },
@@ -655,14 +720,22 @@ class SNPSearch extends React.Component {
                 { dataField: "OpenChromatin_OB", text: "Open Chromatin"},
                 { dataField: "SigHiC_OC", text: "Sig Hi-C"},
             ]
-            this.setState({SNPColumns: columns_update})
+            this.setState({
+                SNPColumns: columns_update,
+                atac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ATAC_seq-osteoblast_pvalue.bigWig',
+                dnase_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/DNase_seq_osteoblast.bigWig',
+                chromHMM_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/E129_25_imputed12marks_hg38lift_dense.bed',
+                H3k27ac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF048BRN_H3K27ac_OB_p-value.bigWig',
+                H3k4me3_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF327MED_ H3K4me3_OB_pvalue.bigWig',
+                H3k4me1_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF103BYE_H3K4me1_OB_pvalue.bigWig',
+            })
             //var sigHiC = anno.SigHiC_OC
             if(annotation.SigHiC_OC){
                 this.setState({hic: annotation.SigHiC_OC});
                 //this.hicProcess();
                 const hicProcess_res = await this.hicProcess();
-                console.log("hicProcess_res:")
-                console.log(hicProcess_res);
+                //console.log("hicProcess_res:")
+                //console.log(hicProcess_res);
             }else{
                 this.setState({ promoterResults: false})
             }
@@ -674,7 +747,7 @@ class SNPSearch extends React.Component {
                 start_pos = 0
             }
             this.setState({ locus_range: "chr" + this.state.chr + ":" + start_pos + "-" + end_pos})
-            console.log("locus_range:" + this.state.locus_range)
+            //console.log("locus_range:" + this.state.locus_range)
         }
         this.setState({ 
             showTable: true,
@@ -692,17 +765,17 @@ class SNPSearch extends React.Component {
           //console.log(this.state.trait_name);
           //var snp_url = "http://localhost:5000/snp/" + this.state.rsid;
           var snp_url = process.env.REACT_APP_EXPRESS_URL + "/snp/" + this.state.rsid;
-          console.log(snp_url);
+          //console.log(snp_url);
           const res = await axios.get(snp_url);
-          console.log(res.data);
-          console.log("type of data:" + typeof res.data)
+          //console.log(res.data);
+          //console.log("type of data:" + typeof res.data)
           if(!res.data.length) {
             this.setState({
                 snpResults: false,
                 showTable: true,
             })
           }else if (res.data.length > 1){ // multiple SNPs within this rsID
-            console.log("Multiple SNP:" + res.data.length);
+            //console.log("Multiple SNP:" + res.data.length);
             this.setState({
                 snps: res.data,
                 multiSNP: true,
@@ -714,8 +787,8 @@ class SNPSearch extends React.Component {
                 snps: res.data,
             })
             const res_generateTable = await this.generateTableData(0);
-            console.log("res_generateTable:")
-            console.log(res_generateTable);
+            //console.log("res_generateTable:")
+            //console.log(res_generateTable);
             
             
           }
@@ -734,8 +807,8 @@ class SNPSearch extends React.Component {
     }
 
     handleSubmit = (event) => {
-        console.log(this.state.rsid);
-        console.log(this.state.cell);
+        //console.log(this.state.rsid);
+        //console.log(this.state.cell);
         this.setState({
             showTable: false,
             snpResults: false,
@@ -830,6 +903,9 @@ class SNPSearch extends React.Component {
                             <Card className="content">
                                 
                                 <CardBody>
+                                    <h5>
+                                        GRCh38
+                                    </h5>
                                     <h5>
                                     Chr: {this.state.chr} 
                                     </h5>
