@@ -16,11 +16,11 @@ class Dashboard extends Component {
         <Row>
           <Col md={6}>
             <div className="home-hero" style={heroStyles}>
-              <h1>Welcome to Musculoskeletal Epigenome Browser.</h1>
-              <p className="text-muted">
+              <h1>Welcome to Musculoskeletal 3D Epigenome Browser.</h1>
+              {/* <p className="text-muted">
                 Discover this UI dashboard framework that will help speed up
                 your next web application project.
-              </p>
+              </p> */}
             </div>
           </Col>
         </Row>

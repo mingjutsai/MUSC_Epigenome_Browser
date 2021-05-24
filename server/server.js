@@ -37,6 +37,7 @@ mongoose
 //routes
 const snpRouter = require('./routes/snp');
 const snp2geneRouter = require('./routes/snp2gene');
+const gwas2geneRouter = require('./routes/gwasSNP')
 const diseaseRouter = require('./routes/disease');
 const promoterhMSCRouter = require('./routes/promoterhMSC');
 const promoterhMSC2geneRouter = require('./routes/promoterhMSC2gene');
@@ -51,6 +52,7 @@ const variantID = require('./routes/variantID');
 app.use('/snp', snpRouter);
 app.use('/snp2gene', snp2geneRouter);
 app.use('/disease', diseaseRouter);
+app.use('/gwas', gwas2geneRouter);
 app.use('/promoterhMSC', promoterhMSCRouter);
 app.use('/promoterhMSC2gene', promoterhMSC2geneRouter);
 app.use('/promoterOB',promoterOBRouter);

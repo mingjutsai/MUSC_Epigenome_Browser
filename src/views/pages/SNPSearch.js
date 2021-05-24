@@ -260,6 +260,15 @@ class SNPSearch extends React.Component {
                             name: this.state.rsid,
                         },
                         {
+                            type: "annotation",
+                            format: "gtf",
+                            url: process.env.REACT_APP_BASE_URL + '/igv/gencode.v35.annotation.sort.gtf.gz',
+                            indexURL: process.env.REACT_APP_BASE_URL + '/igv/gencode.v35.annotation.sort.gtf.gz.tbi',
+                            displayMode: "EXPANDED",
+                            name: "Gencode v35 (gtf)",
+                            visibilityWindow: 10000000
+                        },
+                        {
                             type: "wig",
                             format: "bigwig",
                             url: this.state.atac_url,
@@ -331,15 +340,7 @@ class SNPSearch extends React.Component {
                         //     name: "H3k9ac",
                         //     color: "rgb(252, 74, 3)",
                         // },
-                        {
-                            type: "annotation",
-                            format: "gtf",
-                            url: process.env.REACT_APP_BASE_URL + '/igv/gencode.v35.annotation.sort.gtf.gz',
-                            indexURL: process.env.REACT_APP_BASE_URL + '/igv/gencode.v35.annotation.sort.gtf.gz.tbi',
-                            displayMode: "EXPANDED",
-                            name: "Gencode v35 (gtf)",
-                            visibilityWindow: 10000000
-                        },
+                        
                     ]
                 };
             }else{
@@ -364,6 +365,15 @@ class SNPSearch extends React.Component {
                             name: this.state.rsid,
                         },
                         {
+                            type: "annotation",
+                            format: "gtf",
+                            url: process.env.REACT_APP_BASE_URL + '/igv/gencode.v35.annotation.sort.gtf.gz',
+                            indexURL: process.env.REACT_APP_BASE_URL + '/igv/gencode.v35.annotation.sort.gtf.gz.tbi',
+                            displayMode: "EXPANDED",
+                            name: "Gencode v35 (gtf)",
+                            visibilityWindow: 10000000
+                        },
+                        {
                             type: "wig",
                             format: "bigwig",
                             url: this.state.atac_url,
@@ -435,15 +445,7 @@ class SNPSearch extends React.Component {
                             name: "ENCODE-cCRE",
                             displayMode: "EXPANDED",
                         },
-                        {
-                            type: "annotation",
-                            format: "gtf",
-                            url: process.env.REACT_APP_BASE_URL + '/igv/gencode.v35.annotation.sort.gtf.gz',
-                            indexURL: process.env.REACT_APP_BASE_URL + '/igv/gencode.v35.annotation.sort.gtf.gz.tbi',
-                            displayMode: "EXPANDED",
-                            name: "Gencode v35 (gtf)",
-                            visibilityWindow: 10000000
-                        },
+                        
                     ]
                 };
             }

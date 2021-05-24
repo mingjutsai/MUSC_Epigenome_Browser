@@ -81,13 +81,15 @@ class DiseaseSearch extends React.Component {
         };
         this.columns = [
             { dataField: "RSID", text: "SNP ID", formatter: this.SNP_hyperlink },
-            { dataField: "#Chr", text: "Chr" },
-            { dataField: "Risk_allele", text: "Risk allele" },
-            { dataField: "Risk_allele_AF", text: "Risk allele AF" },
-            { dataField: "Pubmed", text: "Pubmed", formatter: this.hyperLink },
-            { dataField: "Reported_gene", text: "Reported gene" },
-            { dataField: "P-value", text: "P-value", sort: true },
-            { dataField: "STUDY_ACCESSION", text: "Study ID", formatter: this.GCST_hyperlink },
+            // { dataField: "#Chr", text: "Chr" },
+            { dataField: "VariantID", text: "Variant ID"},
+            { dataField: "risk_allele", text: "Risk allele" },
+            { dataField: "risk_allele_freq", text: "Risk allele AF" },
+            { dataField: "pubmed", text: "Pubmed", formatter: this.hyperLink },
+            { dataField: "mapped_gene", text: "Mapped gene" },
+            { dataField: "reported_gene", text: "Reported gene" },
+            { dataField: "pvalue", text: "P-value", sort: true },
+            { dataField: "study_accession", text: "Study ID", formatter: this.GCST_hyperlink },
         ];
         this.LD_columns = [
             { dataField: "Variant", text: "Chr:Pos:Ref/Alt" },
@@ -98,6 +100,11 @@ class DiseaseSearch extends React.Component {
             { dataField: "P_GEFOS2018_Bmd", text: "P-value eBMD", sort: true},
             { dataField: "OR_GEFOS2018_FracA", text: "OR FracA"},
             { dataField: "P_GEFOS2018_FracA", text: "P-value FracA", sort: true},
+            { dataField: "FNBMD_Effect", text: "Effect FNBMD" },
+            { dataField: "FNBMD_pvalue", text: "P-value FNBMD", sort: true},
+            { dataField: "LSBMD_Effect", text: "Effect LSBMD" },
+            { dataField: "LSBMD_pvalue", text: "P-value LSBMD", sort: true},
+            //{ dataField: "SigHiC_OB13", text: "SigHiC_OB13"}
         ];
         this.options = {
             paginationSize: 4,
@@ -378,8 +385,10 @@ class DiseaseSearch extends React.Component {
         this.setState(prevState => ({
             modal: !prevState.modal
         }));
-        const chr = row["#Chr"];
-        const pos = row.Start;
+        //const chr = row["#Chr"];
+        const chr = row.Chr;
+        //const pos = row.Start;
+        const pos = row.Pos;
         const ref = row.Ref;
         const alt = row.Alt;
         const index_snp = chr + "_" + pos + "_" + ref + "_" + alt;
@@ -731,7 +740,8 @@ class DiseaseSearch extends React.Component {
               getLDData: false,
             })
           //console.log(this.state.trait_name);
-          var trait_url = process.env.REACT_APP_EXPRESS_URL + "/disease/" + term.replaceAll(' ', '%20');
+          //var trait_url = process.env.REACT_APP_EXPRESS_URL + "/disease/" + term.replaceAll(' ', '%20');
+          var trait_url = process.env.REACT_APP_EXPRESS_URL + "/gwas/" + term.replaceAll(' ', '%20');
           //console.log(trait_url);
           const data = await axios.get(trait_url);
            //console.log(data);
