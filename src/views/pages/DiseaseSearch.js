@@ -203,13 +203,30 @@ class DiseaseSearch extends React.Component {
                         },
                         {
                             type: "annotation",
+                            format: "bed",
+                            url: process.env.REACT_APP_BASE_URL + "/igv/promoter_like_regions_annotation_sorted.bed",
+                            height: 50,
+                            name: "Promoter-like-region",
+                            displayMode: "EXPANDED",
+                        },
+                        {
+                            type: "annotation",
+                            format: "bb",
+                            url: process.env.REACT_APP_BASE_URL + "/igv/bigwig/encodeCcreCombined.bb",
+                            height: 50,
+                            name: "ENCODE-cCRE",
+                            displayMode: "EXPANDED",
+                        },
+                        {
+                            type: "annotation",
                             format: "gtf",
                             url: process.env.REACT_APP_BASE_URL + "/igv/gencode.v35.annotation.sort.gtf.gz",
                             indexURL: process.env.REACT_APP_BASE_URL + "/igv/gencode.v35.annotation.sort.gtf.gz.tbi",
                             //displayMode: "SQUISHED",
                             displayMode: "EXPANDED",
                             name: "Gencode v35 (gtf)",
-                            visibilityWindow: 10000000
+                            visibilityWindow: 10000000,
+                            height: 100,
                         },
                         {
                             type: "wig",
@@ -257,22 +274,7 @@ class DiseaseSearch extends React.Component {
                             name: "H3k4me3",
                             color: "rgb(252, 74, 3)",
                         },
-                        {
-                            type: "annotation",
-                            format: "bed",
-                            url: process.env.REACT_APP_BASE_URL + "/igv/promoter_like_regions_annotation_sorted.bed",
-                            height: 50,
-                            name: "Promoter-like-region",
-                            displayMode: "EXPANDED",
-                        },
-                        {
-                            type: "annotation",
-                            format: "bb",
-                            url: process.env.REACT_APP_BASE_URL + "/igv/bigwig/encodeCcreCombined.bb",
-                            height: 50,
-                            name: "ENCODE-cCRE",
-                            displayMode: "EXPANDED",
-                        },
+                        
                         
                     ]
                 };
@@ -302,13 +304,30 @@ class DiseaseSearch extends React.Component {
                         },
                         {
                             type: "annotation",
+                            format: "bed",
+                            url: process.env.REACT_APP_BASE_URL + "/igv/promoter_like_regions_annotation_sorted.bed",
+                            height: 50,
+                            name: "Promoter-like-region",
+                            displayMode: "EXPANDED",
+                        },
+                        {
+                            type: "annotation",
+                            format: "bb",
+                            url: process.env.REACT_APP_BASE_URL + "/igv/bigwig/encodeCcreCombined.bb",
+                            height: 50,
+                            name: "ENCODE-cCRE",
+                            displayMode: "EXPANDED",
+                        },
+                        {
+                            type: "annotation",
                             format: "gtf",
                             url: process.env.REACT_APP_BASE_URL + "/igv/gencode.v35.annotation.sort.gtf.gz",
                             indexURL: process.env.REACT_APP_BASE_URL + "/igv/gencode.v35.annotation.sort.gtf.gz.tbi",
                             //displayMode: "SQUISHED",
                             displayMode: "EXPANDED",
                             name: "Gencode v35 (gtf)",
-                            visibilityWindow: 10000000
+                            visibilityWindow: 10000000,
+                            height: 100,
                         },
                         {
                             type: "wig",
