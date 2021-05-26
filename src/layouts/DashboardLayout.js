@@ -89,7 +89,7 @@ export default class DashboardLayout extends Component {
             </Page>
           </div>
           <Footer>
-            <span>Copyright © 2021 Yi-Hsiang Hsu's Lab@HMS. All rights reserved.</span>
+            <span>Copyright © 2021 Yi-Hsiang Hsu's Lab@Marcus Institute for Aging Research and Harvard Medical School. All rights reserved.</span>
             {/* <span>
               <a href="#!">Terms</a> | <a href="#!">Privacy Policy</a>
             </span> */}
