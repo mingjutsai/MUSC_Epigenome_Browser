@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import axios from 'axios';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 //import {Typeahead} from 'react-bootstrap-typeahead';
 import { Hint } from 'react-autocomplete-hint';
 import { AutoComplete } from "@react-md/autocomplete";
@@ -93,10 +94,10 @@ class DiseaseSearch extends React.Component {
         ];
         this.LD_columns = [
             { dataField: "Variant", text: "Chr:Pos:Ref/Alt" },
-            { dataField: "RSID", text: "RSID" },
+            { dataField: "RSID", text: "RSID", filter: textFilter() },
             { dataField: "R_square", text: "r2", sort:true},
             { dataField: "BETA_GEFOS2018_Bmd", text: "Beta eBMD"},
-            { dataField: "SE_GEFOS2018_Bmd", text: "SE eBMD"},
+            // { dataField: "SE_GEFOS2018_Bmd", text: "SE eBMD"},
             { dataField: "P_GEFOS2018_Bmd", text: "P-value eBMD", sort: true},
             { dataField: "OR_GEFOS2018_FracA", text: "OR FracA"},
             { dataField: "P_GEFOS2018_FracA", text: "P-value FracA", sort: true},
@@ -1080,6 +1081,7 @@ class DiseaseSearch extends React.Component {
                                             hover
                                             condensed
                                             pagination={paginationFactory(this.options)}
+                                            filter={ filterFactory()}
                                         />
                                         {/* <Modal isOpen={this.state.modal} toggle={this.toggle}>
                                             <ModalHeader toggle={this.toggle}>Select the cell type</ModalHeader>
