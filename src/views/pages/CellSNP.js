@@ -252,6 +252,16 @@ class CellSNP extends React.Component {
                             indexURL: false,
                             name: this.state.rsid,
                         },
+                        
+                        {
+                            type: "annotation",
+                            format: "bed",
+                            url: process.env.REACT_APP_BASE_URL + "/igv/promoter_like_regions_annotation_sorted.bed",
+                            height: 50,
+                            name: "Promoter-like-region",
+                            displayMode: "EXPANDED",
+                        },
+                        
                         {
                             type: "annotation",
                             format: "gtf",
@@ -259,7 +269,16 @@ class CellSNP extends React.Component {
                             indexURL: process.env.REACT_APP_BASE_URL + '/igv/gencode.v35.annotation.sort.gtf.gz.tbi',
                             displayMode: "EXPANDED",
                             name: "Gencode v35 (gtf)",
-                            visibilityWindow: 10000000
+                            visibilityWindow: 10000000,
+                            height: 150,
+                        },
+                        {
+                            type: "annotation",
+                            format: "bed",
+                            url: this.state.chromHMM_url,
+                            height: 50,
+                            name: "ChromHMM",
+                            displayMode: "EXPANDED",
                         },
                         {
                             type: "wig",
@@ -273,16 +292,9 @@ class CellSNP extends React.Component {
                             format: "bigwig",
                             url: this.state.dnase_url,
                             height: 50,
-                            name: "Dnase-seq",
+                            name: "DNase-seq",
                         },
-                        {
-                            type: "annotation",
-                            format: "bed",
-                            url: this.state.chromHMM_url,
-                            height: 50,
-                            name: "ChromHMM",
-                            displayMode: "EXPANDED",
-                        },
+                        
                         {
                             type: "wig",
                             format: "bigwig",
@@ -308,18 +320,20 @@ class CellSNP extends React.Component {
                             color: "rgb(252, 74, 3)",
                         },
                         {
+                            url: process.env.REACT_APP_BASE_URL + "/igv/GeneHancer.bb",
+                            //type: "interaction",
                             type: "annotation",
-                            format: "bed",
-                            url: process.env.REACT_APP_BASE_URL + "/igv/promoter_like_regions_annotation_sorted.bed",
-                            height: 50,
-                            name: "Promoter-like-region",
-                            displayMode: "EXPANDED",
+                            format: "bb",
+                            name: "GeneHancer",
+                            //arcType: "nested",
+                            //useScore: true,
+                            showBlocks: true,
+                            height: 50
                         },
                         {
                             type: "annotation",
                             format: "bb",
-                            //url: "http://localhost:3000/igv/bigwig/encodeCcreCombined.bb",
-                            url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/encodeCcreCombined.bb',
+                            url: process.env.REACT_APP_BASE_URL + "/igv/bigwig/encodeCcreCombined.bb",
                             height: 50,
                             name: "ENCODE-cCRE",
                             displayMode: "EXPANDED",
@@ -357,6 +371,16 @@ class CellSNP extends React.Component {
                             indexURL: false,
                             name: this.state.rsid,
                         },
+                        
+                        {
+                            type: "annotation",
+                            format: "bed",
+                            url: process.env.REACT_APP_BASE_URL + "/igv/promoter_like_regions_annotation_sorted.bed",
+                            height: 50,
+                            name: "Promoter-like-region",
+                            displayMode: "EXPANDED",
+                        },
+                        
                         {
                             type: "annotation",
                             format: "gtf",
@@ -364,7 +388,16 @@ class CellSNP extends React.Component {
                             indexURL: process.env.REACT_APP_BASE_URL + '/igv/gencode.v35.annotation.sort.gtf.gz.tbi',
                             displayMode: "EXPANDED",
                             name: "Gencode v35 (gtf)",
-                            visibilityWindow: 10000000
+                            visibilityWindow: 10000000,
+                            height: 150,
+                        },
+                        {
+                            type: "annotation",
+                            format: "bed",
+                            url: this.state.chromHMM_url,
+                            height: 50,
+                            name: "ChromHMM",
+                            displayMode: "EXPANDED",
                         },
                         {
                             type: "wig",
@@ -378,16 +411,9 @@ class CellSNP extends React.Component {
                             format: "bigwig",
                             url: this.state.dnase_url,
                             height: 50,
-                            name: "Dnase-seq",
+                            name: "DNase-seq",
                         },
-                        {
-                            type: "annotation",
-                            format: "bed",
-                            url: this.state.chromHMM_url,
-                            height: 50,
-                            name: "ChromHMM",
-                            displayMode: "EXPANDED",
-                        },
+                        
                         {
                             type: "wig",
                             format: "bigwig",
@@ -413,18 +439,20 @@ class CellSNP extends React.Component {
                             color: "rgb(252, 74, 3)",
                         },
                         {
+                            url: process.env.REACT_APP_BASE_URL + "/igv/GeneHancer.bb",
+                            //type: "interaction",
                             type: "annotation",
-                            format: "bed",
-                            url: process.env.REACT_APP_BASE_URL + "/igv/promoter_like_regions_annotation_sorted.bed",
-                            height: 50,
-                            name: "Promoter-like-region",
-                            displayMode: "EXPANDED",
+                            format: "bb",
+                            name: "GeneHancer",
+                            //arcType: "nested",
+                            //useScore: true,
+                            showBlocks: true,
+                            height: 50
                         },
                         {
                             type: "annotation",
                             format: "bb",
-                            //url: "http://localhost:3000/igv/bigwig/encodeCcreCombined.bb",
-                            url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/encodeCcreCombined.bb',
+                            url: process.env.REACT_APP_BASE_URL + "/igv/bigwig/encodeCcreCombined.bb",
                             height: 50,
                             name: "ENCODE-cCRE",
                             displayMode: "EXPANDED",

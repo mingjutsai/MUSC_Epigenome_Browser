@@ -3,6 +3,7 @@ import reactFeature from '../../assets/images/react-feature.svg';
 import sassFeature from '../../assets/images/sass-feature.svg';
 import bootstrapFeature from '../../assets/images/bootstrap-feature.svg';
 import responsiveFeature from '../../assets/images/responsive-feature.svg';
+import dbFeature from '../../assets/images/epi_musc_browser.jpg'
 import { 
   Card,
   CardBody,
@@ -10,13 +11,56 @@ import {
   Row, 
   Col,
 } from 'reactstrap';
-import { Doughnut, Line } from 'react-chartjs-2';
+import { 
+  Doughnut,
+  Bar,
+  Line 
+} from 'react-chartjs-2';
 
 class Dashboard extends Component {
   render() {
     const heroStyles = {
       padding: '50px 0 70px'
     };
+    const data = {
+      labels: ['hMSC', 'Osteoblast', 'Osteocyte', 'Myotybe', 'Myoblast'],
+      datasets: [
+        {
+          label: '# of Significant Hi-C interactions',
+          //label: "No2",
+          data: [2041258, 1916942, 1174339, 1500000, 1500000],
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            //'rgba(255, 159, 64, 0.2)',
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            //'rgba(255, 159, 64, 1)',
+          ],
+          borderWidth: 1,
+        },
+      ],
+    };
+    const options = {
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+            },
+          },
+        ],
+      },
+    };
+    
     const chartColors = {
       red: 'rgb(233, 30, 99)',
       danger: 'rgb(233, 30, 99)',
@@ -72,21 +116,35 @@ class Dashboard extends Component {
           </Col>
         </Row>
         <Row>
-          <Col md={4} sm={12}>
+          <Col md={12} sm={12}>
             <Card>
-              <CardHeader>Significant Hi-C interactions</CardHeader>
-              <CardBody>
-                <Doughnut
-                  data={donutData}
-                  width={908}
-                  height={768}
-                  legend={{ display: false }}
+              {/* <CardHeader>Databases</CardHeader> */}
+              <CardBody className="display-flex">
+                <img
+                  src={dbFeature}
+                  //style={{ width: 70, height: 70 }}
+                  //alt="react.js"
+                  aria-hidden={true}
                 />
+                
               </CardBody>
             </Card>
           </Col>
+          {/* <Col md={6} sm={12}>
+            <Card>
+              <CardHeader>Significant Hi-C interactions</CardHeader>
+              <CardBody>
+                <Bar 
+                  data={data} 
+                  options={options}
+                  legend={{ display: false }}
+                />
+                
+              </CardBody>
+            </Card>
+          </Col> */}
         </Row>
-        <Row>
+        {/* <Row>
           <Col md={6}>
             <Card>
               <CardBody className="display-flex">
@@ -123,8 +181,8 @@ class Dashboard extends Component {
               </CardBody>
             </Card>
           </Col>
-        </Row>
-        <Row>
+        </Row> */}
+        {/* <Row>
           <Col md={6}>
             <Card>
               <CardBody className="display-flex">
@@ -161,7 +219,7 @@ class Dashboard extends Component {
               </CardBody>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
       </div>
     );
   }

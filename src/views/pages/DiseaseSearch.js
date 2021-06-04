@@ -211,14 +211,6 @@ class DiseaseSearch extends React.Component {
                         },
                         {
                             type: "annotation",
-                            format: "bb",
-                            url: process.env.REACT_APP_BASE_URL + "/igv/bigwig/encodeCcreCombined.bb",
-                            height: 50,
-                            name: "ENCODE-cCRE",
-                            displayMode: "EXPANDED",
-                        },
-                        {
-                            type: "annotation",
                             format: "gtf",
                             url: process.env.REACT_APP_BASE_URL + "/igv/gencode.v35.annotation.sort.gtf.gz",
                             indexURL: process.env.REACT_APP_BASE_URL + "/igv/gencode.v35.annotation.sort.gtf.gz.tbi",
@@ -226,7 +218,15 @@ class DiseaseSearch extends React.Component {
                             displayMode: "EXPANDED",
                             name: "Gencode v35 (gtf)",
                             visibilityWindow: 10000000,
-                            height: 100,
+                            height: 150,
+                        },
+                        {
+                            type: "annotation",
+                            format: "bed",
+                            url: this.state.chromHMM_url,
+                            height: 50,
+                            name: "ChromHMM",
+                            displayMode: "EXPANDED",
                         },
                         {
                             type: "wig",
@@ -242,14 +242,7 @@ class DiseaseSearch extends React.Component {
                             height: 50,
                             name: "Dnase-seq",
                         },
-                        {
-                            type: "annotation",
-                            format: "bed",
-                            url: this.state.chromHMM_url,
-                            height: 50,
-                            name: "ChromHMM",
-                            displayMode: "EXPANDED",
-                        },
+                        
                         {
                             type: "wig",
                             format: "bigwig",
@@ -274,7 +267,25 @@ class DiseaseSearch extends React.Component {
                             name: "H3k4me3",
                             color: "rgb(252, 74, 3)",
                         },
-                        
+                        {
+                            url: process.env.REACT_APP_BASE_URL + "/igv/GeneHancer.bb",
+                            //type: "interaction",
+                            type: "annotation",
+                            format: "bb",
+                            name: "GeneHancer",
+                            //arcType: "nested",
+                            //useScore: true,
+                            showBlocks: true,
+                            height: 50
+                        },
+                        {
+                            type: "annotation",
+                            format: "bb",
+                            url: process.env.REACT_APP_BASE_URL + "/igv/bigwig/encodeCcreCombined.bb",
+                            height: 50,
+                            name: "ENCODE-cCRE",
+                            displayMode: "EXPANDED",
+                        },
                         
                     ]
                 };
@@ -303,6 +314,17 @@ class DiseaseSearch extends React.Component {
                             displayMode: "EXPANDED",
                         },
                         {
+                            url: process.env.REACT_APP_BASE_URL + "/igv/GeneHancer.bb",
+                            //type: "interaction",
+                            type: "annotation",
+                            format: "bb",
+                            name: "GeneHancer",
+                            //arcType: "nested",
+                            //useScore: true,
+                            showBlocks: true,
+                            height: 50
+                        },
+                        {
                             type: "annotation",
                             format: "bed",
                             url: process.env.REACT_APP_BASE_URL + "/igv/promoter_like_regions_annotation_sorted.bed",
@@ -327,7 +349,7 @@ class DiseaseSearch extends React.Component {
                             displayMode: "EXPANDED",
                             name: "Gencode v35 (gtf)",
                             visibilityWindow: 10000000,
-                            height: 100,
+                            height: 200,
                         },
                         {
                             type: "wig",
@@ -520,7 +542,7 @@ class DiseaseSearch extends React.Component {
                 var variant_chr = variant[0]
                 var variant_pos = variant[1]
                 var rsquare = res.data[i].R_square
-                var hic;
+                var hic = null
                 if(rsquare < this.state.r_cutoff){
                     continue;
                 }
@@ -528,6 +550,10 @@ class DiseaseSearch extends React.Component {
                     if(res.data[i].SigHiC_hMSC){
                         hic = res.data[i].SigHiC_hMSC;
                         has_hic = true;
+                        // console.log("variant:")
+                        // console.log(res.data[i].Variant)
+                        // console.log("hic:")
+                        // console.log(hic)
                     }
                     this.setState({
                         atac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/ATAC_seq-hMSC_pvalue.bigwig',
@@ -579,7 +605,7 @@ class DiseaseSearch extends React.Component {
                     //var reg_content = "chr" + reg_range[0] + "\t" + reg_range[1] + "\t" + reg_range[2];
                     var reg_content = "chr" + reg_range[0] + "\t" + variant_pos + "\t" + variant_pos;
                     
-                    // console.log(reg_content)
+                    //console.log(reg_content)
                     var promoter = hic.split('PromoterBin:')
                     var promoter_bin = promoter[1].split(',')
                     for(var p=0;p<promoter_bin.length;p++){
@@ -633,8 +659,8 @@ class DiseaseSearch extends React.Component {
                     locus_hic_url: process.env.REACT_APP_BASE_URL + "/igv/" + this.state.rsid + "_" + this.state.cell + ".bedpe.txt",
                     hicTrack: true,
                 })
-                // console.log("igv_bedpe_content:")
-                // console.log(igv_bedpe_content)
+                //console.log("igv_bedpe_content:")
+                //console.log(igv_bedpe_content)
                 const response = await fetch(process.env.REACT_APP_EXPRESS_URL + '/writeFile',{
                     method: 'POST',
                     headers: {

@@ -242,23 +242,25 @@ class SNPSearch extends React.Component {
                             //visibilityWindow: 10000000,
                             height: 150
                         },
-                        // {
-                        //     url: "http://localhost:3000/igv/bigwig/GH_interactions1_all.final.bb",
-                        //     type: "interaction",
-                        //     format: "bb",
-                        //     name: "GeneHancer",
-                        //     arcType: "nested",
-                        //     useScore: true,
-                        //     showBlocks: true,
-                        //     height: 100
-                        // },
+                        
                         {
                             type: "annotation",
                             format: "bed",
                             url: this.state.locus_snp_url,
                             indexURL: false,
                             name: this.state.rsid,
+                            height: 50
                         },
+                        
+                        {
+                            type: "annotation",
+                            format: "bed",
+                            url: process.env.REACT_APP_BASE_URL + "/igv/promoter_like_regions_annotation_sorted.bed",
+                            height: 50,
+                            name: "Promoter-like-region",
+                            displayMode: "EXPANDED",
+                        },
+                        
                         {
                             type: "annotation",
                             format: "gtf",
@@ -266,7 +268,16 @@ class SNPSearch extends React.Component {
                             indexURL: process.env.REACT_APP_BASE_URL + '/igv/gencode.v35.annotation.sort.gtf.gz.tbi',
                             displayMode: "EXPANDED",
                             name: "Gencode v35 (gtf)",
-                            visibilityWindow: 10000000
+                            visibilityWindow: 10000000,
+                            height: 150,
+                        },
+                        {
+                            type: "annotation",
+                            format: "bed",
+                            url: this.state.chromHMM_url,
+                            height: 50,
+                            name: "ChromHMM",
+                            displayMode: "EXPANDED",
                         },
                         {
                             type: "wig",
@@ -280,16 +291,9 @@ class SNPSearch extends React.Component {
                             format: "bigwig",
                             url: this.state.dnase_url,
                             height: 50,
-                            name: "Dnase-seq",
+                            name: "DNase-seq",
                         },
-                        {
-                            type: "annotation",
-                            format: "bed",
-                            url: this.state.chromHMM_url,
-                            height: 50,
-                            name: "ChromHMM",
-                            displayMode: "EXPANDED",
-                        },
+                        
                         {
                             type: "wig",
                             format: "bigwig",
@@ -315,12 +319,15 @@ class SNPSearch extends React.Component {
                             color: "rgb(252, 74, 3)",
                         },
                         {
+                            url: process.env.REACT_APP_BASE_URL + "/igv/GeneHancer.bb",
+                            //type: "interaction",
                             type: "annotation",
-                            format: "bed",
-                            url: process.env.REACT_APP_BASE_URL + "/igv/promoter_like_regions_annotation_sorted.bed",
-                            height: 50,
-                            name: "Promoter-like-region",
-                            displayMode: "EXPANDED",
+                            format: "bb",
+                            name: "GeneHancer",
+                            //arcType: "nested",
+                            //useScore: true,
+                            showBlocks: true,
+                            height: 50
                         },
                         {
                             type: "annotation",
@@ -364,6 +371,16 @@ class SNPSearch extends React.Component {
                             indexURL: false,
                             name: this.state.rsid,
                         },
+                        
+                        {
+                            type: "annotation",
+                            format: "bed",
+                            url: process.env.REACT_APP_BASE_URL + "/igv/promoter_like_regions_annotation_sorted.bed",
+                            height: 50,
+                            name: "Promoter-like-region",
+                            displayMode: "EXPANDED",
+                        },
+                        
                         {
                             type: "annotation",
                             format: "gtf",
@@ -371,7 +388,8 @@ class SNPSearch extends React.Component {
                             indexURL: process.env.REACT_APP_BASE_URL + '/igv/gencode.v35.annotation.sort.gtf.gz.tbi',
                             displayMode: "EXPANDED",
                             name: "Gencode v35 (gtf)",
-                            visibilityWindow: 10000000
+                            visibilityWindow: 10000000,
+                            height: 150,
                         },
                         {
                             type: "wig",
@@ -385,7 +403,7 @@ class SNPSearch extends React.Component {
                             format: "bigwig",
                             url: this.state.dnase_url,
                             height: 50,
-                            name: "Dnase-seq",
+                            name: "DNase-seq",
                         },
                         {
                             type: "annotation",
@@ -419,22 +437,16 @@ class SNPSearch extends React.Component {
                             name: "H3k4me3",
                             color: "rgb(252, 74, 3)",
                         },
-                        // {   
-                        //     type: "wig",
-                        //     format: "bigwig",
-                        //     //url: "http://localhost:3000/igv/bigwig/hMSC/ENCFF757SDY_hMSC_H3K9ac_pvalue.bigWig",
-                        //     url: this.state.H3k9ac_url,
-                        //     height: 50,
-                        //     name: "H3k9ac",
-                        //     color: "rgb(252, 74, 3)",
-                        // },
                         {
+                            url: process.env.REACT_APP_BASE_URL + "/igv/GeneHancer.bb",
+                            //type: "interaction",
                             type: "annotation",
-                            format: "bed",
-                            url: process.env.REACT_APP_BASE_URL + "/igv/promoter_like_regions_annotation_sorted.bed",
-                            height: 50,
-                            name: "Promoter-like-region",
-                            displayMode: "EXPANDED",
+                            format: "bb",
+                            name: "GeneHancer",
+                            //arcType: "nested",
+                            //useScore: true,
+                            showBlocks: true,
+                            height: 50
                         },
                         {
                             type: "annotation",
@@ -445,6 +457,16 @@ class SNPSearch extends React.Component {
                             name: "ENCODE-cCRE",
                             displayMode: "EXPANDED",
                         },
+                        // {   
+                        //     type: "wig",
+                        //     format: "bigwig",
+                        //     //url: "http://localhost:3000/igv/bigwig/hMSC/ENCFF757SDY_hMSC_H3K9ac_pvalue.bigWig",
+                        //     url: this.state.H3k9ac_url,
+                        //     height: 50,
+                        //     name: "H3k9ac",
+                        //     color: "rgb(252, 74, 3)",
+                        // },
+                        
                         
                     ]
                 };
