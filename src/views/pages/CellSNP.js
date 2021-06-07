@@ -55,6 +55,7 @@ class CellSNP extends React.Component {
             locus_snp_url: '',
             atac_url: '',
             dnase_url: '',
+            rnaseq_url: '',
             chromHMM_url: '',
             H3k27ac_url: '',
             H3k4me3_url: '',
@@ -320,6 +321,13 @@ class CellSNP extends React.Component {
                             color: "rgb(252, 74, 3)",
                         },
                         {
+                            type: "wig",
+                            format: "bigwig",
+                            url: this.state.rnaseq_url,
+                            height: 50,
+                            name: "RNA-seq",
+                        },
+                        {
                             url: process.env.REACT_APP_BASE_URL + "/igv/GeneHancer.bb",
                             //type: "interaction",
                             type: "annotation",
@@ -437,6 +445,13 @@ class CellSNP extends React.Component {
                             height: 50,
                             name: "H3k4me3",
                             color: "rgb(252, 74, 3)",
+                        },
+                        {
+                            type: "wig",
+                            format: "bigwig",
+                            url: this.state.rnaseq_url,
+                            height: 50,
+                            name: "RNA-seq",
                         },
                         {
                             url: process.env.REACT_APP_BASE_URL + "/igv/GeneHancer.bb",
@@ -687,6 +702,7 @@ class CellSNP extends React.Component {
                 H3k4me3_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/ENCFF611FKW_hMSC_H3K4me3_pvalue.bigWig',
                 H3k4me1_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/ENCFF648BRC_hMSC_H3K4me1_pvalue.bigWig',
                 H3k9ac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/ENCFF757SDY_hMSC_H3K9ac_pvalue.bigWig',
+                rnaseq_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/rep1PE_stranded_genome_plusAll.bw',
             })
             
             //console.log("sigHiC:" + annotation.SigHiC_hMSC)
@@ -721,6 +737,7 @@ class CellSNP extends React.Component {
                 H3k4me3_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF327MED_ H3K4me3_OB_pvalue.bigWig',
                 H3k4me1_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF103BYE_H3K4me1_OB_pvalue.bigWig',
                 H3k9ac_url: '',
+                rnaseq_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/rep1PE_stranded_genome_plusAll.bw',
             })
             if(annotation.SigHiC_OB13){
                 this.setState({hic: annotation.SigHiC_OB13});
@@ -750,6 +767,7 @@ class CellSNP extends React.Component {
                 H3k27ac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF048BRN_H3K27ac_OB_p-value.bigWig',
                 H3k4me3_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF327MED_ H3K4me3_OB_pvalue.bigWig',
                 H3k4me1_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF103BYE_H3K4me1_OB_pvalue.bigWig',
+                rnaseq_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteocyte/rep1PE_stranded_genome_plusAll.bw',
             })
             //var sigHiC = anno.SigHiC_OC
             if(annotation.SigHiC_OC){

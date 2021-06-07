@@ -60,6 +60,7 @@ class DiseaseSearch extends React.Component {
             locus_hic_url: '',
             atac_url: '',
             dnase_url: '',
+            rnaseq_url: '',
             chromHMM_url: '',
             H3k27ac_url: '',
             H3k4me3_url: '',
@@ -241,7 +242,7 @@ class DiseaseSearch extends React.Component {
                             format: "bigwig",
                             url: this.state.dnase_url,
                             height: 50,
-                            name: "Dnase-seq",
+                            name: "DNase-seq",
                         },
                         
                         {
@@ -267,6 +268,13 @@ class DiseaseSearch extends React.Component {
                             height: 50,
                             name: "H3k4me3",
                             color: "rgb(252, 74, 3)",
+                        },
+                        {
+                            type: "wig",
+                            format: "bigwig",
+                            url: this.state.rnaseq_url,
+                            height: 50,
+                            name: "RNA-seq",
                         },
                         {
                             url: process.env.REACT_APP_BASE_URL + "/igv/GeneHancer.bb",
@@ -315,30 +323,11 @@ class DiseaseSearch extends React.Component {
                             displayMode: "EXPANDED",
                         },
                         {
-                            url: process.env.REACT_APP_BASE_URL + "/igv/GeneHancer.bb",
-                            //type: "interaction",
-                            type: "annotation",
-                            format: "bb",
-                            name: "GeneHancer",
-                            //arcType: "nested",
-                            //useScore: true,
-                            showBlocks: true,
-                            height: 50
-                        },
-                        {
                             type: "annotation",
                             format: "bed",
                             url: process.env.REACT_APP_BASE_URL + "/igv/promoter_like_regions_annotation_sorted.bed",
                             height: 50,
                             name: "Promoter-like-region",
-                            displayMode: "EXPANDED",
-                        },
-                        {
-                            type: "annotation",
-                            format: "bb",
-                            url: process.env.REACT_APP_BASE_URL + "/igv/bigwig/encodeCcreCombined.bb",
-                            height: 50,
-                            name: "ENCODE-cCRE",
                             displayMode: "EXPANDED",
                         },
                         {
@@ -364,7 +353,7 @@ class DiseaseSearch extends React.Component {
                             format: "bigwig",
                             url: this.state.dnase_url,
                             height: 50,
-                            name: "Dnase-seq",
+                            name: "DNase-seq",
                         },
                         {
                             type: "annotation",
@@ -399,12 +388,22 @@ class DiseaseSearch extends React.Component {
                             color: "rgb(252, 74, 3)",
                         },
                         {
-                            type: "annotation",
-                            format: "bed",
-                            url: process.env.REACT_APP_BASE_URL + "/igv/promoter_like_regions_annotation_sorted.bed",
+                            type: "wig",
+                            format: "bigwig",
+                            url: this.state.rnaseq_url,
                             height: 50,
-                            name: "Promoter-like-region",
-                            displayMode: "EXPANDED",
+                            name: "RNA-seq",
+                        },
+                        {
+                            url: process.env.REACT_APP_BASE_URL + "/igv/GeneHancer.bb",
+                            //type: "interaction",
+                            type: "annotation",
+                            format: "bb",
+                            name: "GeneHancer",
+                            //arcType: "nested",
+                            //useScore: true,
+                            showBlocks: true,
+                            height: 50
                         },
                         {
                             type: "annotation",
@@ -563,6 +562,7 @@ class DiseaseSearch extends React.Component {
                         H3k27ac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/ENCFF223NOV_hMSC_H3K27Ac_pvalue.bigWig',
                         H3k4me3_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/ENCFF611FKW_hMSC_H3K4me3_pvalue.bigWig',
                         H3k4me1_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/ENCFF648BRC_hMSC_H3K4me1_pvalue.bigWig',
+                        rnaseq_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/hMSC/rep1PE_stranded_genome_plusAll.bw',
                     })
                 }else if(this.state.cell === "Osteoblast"){
                     if(res.data[i].SigHiC_OB13){
@@ -576,6 +576,7 @@ class DiseaseSearch extends React.Component {
                         H3k27ac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF048BRN_H3K27ac_OB_p-value.bigWig',
                         H3k4me3_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF327MED_ H3K4me3_OB_pvalue.bigWig',
                         H3k4me1_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF103BYE_H3K4me1_OB_pvalue.bigWig',
+                        rnaseq_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/rep1PE_stranded_genome_plusAll.bw',
                     })
                 }else{
                     if(res.data[i].SigHiC_OC){
@@ -589,6 +590,7 @@ class DiseaseSearch extends React.Component {
                         H3k27ac_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF048BRN_H3K27ac_OB_p-value.bigWig',
                         H3k4me3_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF327MED_ H3K4me3_OB_pvalue.bigWig',
                         H3k4me1_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteoblast/ENCFF103BYE_H3K4me1_OB_pvalue.bigWig',
+                        rnaseq_url: process.env.REACT_APP_BASE_URL + '/igv/bigwig/osteocyte/rep1PE_stranded_genome_plusAll.bw',
                     })
                 }
                 if(hic){
